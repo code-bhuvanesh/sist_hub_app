@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> appStarted(AppStarted event, Emitter<AuthState> emit) async {
     if (await _checkAuthenticated()) {
+      CurrentUser.instance.token = await _readToken();
       emit(Authenticated());
     } else {
       emit(UnAuthenticated());
@@ -38,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   FutureOr<void> logout(AuthLogout event, Emitter<AuthState> emit) async {
     emit(AuthInitial());
     _deleteUser();
+    CurrentUser.instance.token = null;
     emit(UnAuthenticated());
   }
 
@@ -52,7 +54,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   FutureOr<bool> _checkAuthenticated() async {
-
     if ((await _readToken()).isNotEmpty) {
       return true;
     } else {

@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
+import 'package:sist_hub/features/home/bloc/home_bloc.dart';
 import 'package:sist_hub/features/settings/settings_screen.dart';
 import 'package:sist_hub/styles/styles.dart';
+import 'package:sist_hub/utils/constants.dart';
 
 import '../login/login_screen.dart';
 import 'widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  static var routeName = "/homeScreen";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,14 +20,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var systemOverlayStyle = const SystemUiOverlayStyle(
     // statusBarIconBrightness: Brightness.dark,
-    statusBarColor: AppColors.background,
-    // statusBarBrightness: Brightness.light
-    // systemNavigationBarColor: AppColors.background,
+    // statusBarColor: AppColors.background,
+    // statusBarBrightness: Brightness.light,
+    systemNavigationBarColor: AppColors.postBorder,
   );
   int postionIndex = 0;
   @override
   void initState() {
     super.initState();
+    print("constants url ${CurrentUser.instance.url}");
+    context.read<HomeBloc>().add(LoadPosts());
   }
 
   void logout() {
@@ -117,43 +120,37 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             color: AppColors.background,
             child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                      child: ListView.builder(
-                    padding: const EdgeInsets.all(5),
-                    itemCount: 4,
-                    itemBuilder: (context, index) =>
-                        PostWidget(index: index + 1),
-                  ))
-                ],
+              child: BlocBuilder<HomeBloc, HomeState>(
+                builder: (context, state) {
+                  var loadedPosts = [];
+                  if (state is PostsLoaded) {
+                    loadedPosts = state.posts;
+                  }
+                  if (state is PostsLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Expanded(
+                      child: loadedPosts.isNotEmpty
+                          ? ListView.builder(
+                              padding: const EdgeInsets.all(5),
+                              itemCount: loadedPosts.length,
+                              itemBuilder: (context, index) => PostWidget(
+                                  index: index + 1, post: loadedPosts[index]),
+                            )
+                          : const Text(
+                              "no posts avaliable",
+                              style: AppTextStyles.subTitleTextStyle,
+                            ),
+                    );
+                  }
+                },
               ),
             ),
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: (value) => setState(() {
-                postionIndex = value;
-              }),
-          enableFeedback: true,
-          useLegacyColorScheme: true,
-          elevation: 1005,
-          backgroundColor: Colors.white,
-          type: BottomNavigationBarType.fixed,
-          showUnselectedLabels: false,
-          currentIndex: postionIndex,
-          showSelectedLabels: false,
-          items: [
-            navigationBarItem(
-              label: "home",
-              is2Icons: true,
-            ),
-            navigationBarItem(label: "search"),
-            navigationBarItem(label: "add_post"),
-            navigationBarItem(label: "notification", is2Icons: true),
-          ]),
     );
   }
 
@@ -254,25 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
             // height: 50.0,
             child: profilePic(size: 35)),
       ),
-    );
-  }
-
-  navigationBarItem({required String label, is2Icons = false}) {
-    return BottomNavigationBarItem(
-      label: label,
-      icon: ImageIcon(
-        AssetImage("assets/icons/${label}_icon.png"),
-        color: Colors.grey,
-      ),
-      activeIcon: is2Icons
-          ? ImageIcon(
-              AssetImage("assets/icons/${label}_icon_filled.png"),
-              color: Colors.black,
-            )
-          : ImageIcon(
-              AssetImage("assets/icons/${label}_icon.png"),
-              color: Colors.black,
-            ),
     );
   }
 }

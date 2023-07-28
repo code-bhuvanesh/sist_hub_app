@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/common/widgets/logo.dart';
-import 'package:sist_hub/features/home/home_screen.dart';
 import 'package:sist_hub/features/login/bloc/login_bloc.dart';
+import 'package:sist_hub/features/main/main_screen.dart';
 import 'package:sist_hub/styles/styles.dart';
+import 'package:sist_hub/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-  static var routeName = "/loginscreen";
+  static const routeName = "/loginscreen";
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -57,12 +57,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         isLoginLoading = true;
                       });
                     }
-                    if (state is LoginSucessfull || state is LoginFailure) {
+                    if (state is LoginSucessfull) {
                       setState(() {
                         isLoginLoading = false;
                       });
                       Navigator.of(context)
-                          .popAndPushNamed(HomeScreen.routeName);
+                          .popAndPushNamed(MainScreen.routeName);
+                    } else if (state is LoginFailure) {
+                      setState(() {
+                        isLoginLoading = false;
+                        showToast(msg: "username or password is wrong!");
+                      });
                     }
                   },
                   child: Container()),

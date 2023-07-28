@@ -6,7 +6,7 @@ import '../../styles/styles.dart';
 import '../login/login_screen.dart';
 
 class SettingScreen extends StatefulWidget {
-  static var routename = "/settings";
+  static const routename = "/settings";
   const SettingScreen({super.key});
 
   @override

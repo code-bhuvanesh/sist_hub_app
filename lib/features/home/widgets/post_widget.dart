@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sist_hub/styles/styles.dart';
+import 'package:sist_hub/utils/constants.dart';
+
+import '../../../data/model/post.dart';
 
 class PostWidget extends StatelessWidget {
   final int index;
+  final Post post;
 
   const PostWidget({
     required this.index,
     super.key,
+    required this.post,
   });
 
   @override
@@ -45,9 +50,9 @@ class PostWidget extends StatelessWidget {
                   borderRadius: AppSizes.border15,
                   child: SizedBox(
                     width: double.infinity,
-                    child: Image.asset(
-                      // "https://www.technosummit.in/static/media/poster.4ae2e49b660356619f9e.jpeg",
-                      "assets/dummy/workshop_$index.jpg",
+                    child: Image.network(
+                      CurrentUser.instance.url + post.postimg,
+                      // "assets/dummy/workshop_$index.jpg",
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -60,98 +65,98 @@ class PostWidget extends StatelessWidget {
       ),
     );
   }
-}
 
-postTop() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        postUserInfo(),
-        Center(
-          child: SizedBox(
-            width: 50,
-            height: 30,
-            child: Card(
-              color: Colors.transparent,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: const Center(
-                  child: Text(
-                "●●●",
-                style: TextStyle(fontSize: 13),
-              )),
+  postTop() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          postUserInfo(),
+          Center(
+            child: SizedBox(
+              width: 50,
+              height: 30,
+              child: Card(
+                color: Colors.transparent,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                child: const Center(
+                    child: Text(
+                  "●●●",
+                  style: TextStyle(fontSize: 13),
+                )),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  postUserInfo() {
+    return Row(children: [
+      CircleAvatar(
+        foregroundImage: AssetImage("assets/dummy/hack_sist_logo.jpeg"),
+      ),
+      SizedBox(width: 10),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(post.username, style: AppTextStyles.postTittleText),
+          Text(post.postType, style: AppTextStyles.postSubTittleText),
+        ],
+      ),
+    ]);
+  }
+
+  postBottom() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: AppSizes.circleBorder,
+            child: Container(
+              color: Colors.white70,
+              margin: const EdgeInsets.symmetric(vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Row(
+                children: [
+                  const ImageIcon(AssetImage("assets/icons/like_icon.png")),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(post.likes.toString()),
+                ],
+              ),
             ),
           ),
-        )
-      ],
-    ),
-  );
-}
-
-postUserInfo() {
-  return const Row(children: [
-    CircleAvatar(
-      foregroundImage: AssetImage("assets/dummy/hack_sist_logo.jpeg"),
-    ),
-    SizedBox(width: 10),
-    Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Hack SIST", style: AppTextStyles.postTittleText),
-        Text("workshop", style: AppTextStyles.postSubTittleText),
-      ],
-    ),
-  ]);
-}
-
-postBottom() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: AppSizes.circleBorder,
-          child: Container(
-            color: Colors.white70,
-            margin: const EdgeInsets.symmetric(vertical: 1),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: const Row(
-              children: [
-                ImageIcon(AssetImage("assets/icons/like_icon.png")),
-                SizedBox(
-                  width: 5,
-                ),
-                Text("100"),
-              ],
+          const SizedBox(
+            width: 10,
+          ),
+          ClipRRect(
+            borderRadius: AppSizes.circleBorder,
+            child: Container(
+              color: Colors.white70,
+              margin: const EdgeInsets.symmetric(vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: const Row(
+                children: [
+                  ImageIcon(AssetImage("assets/icons/comment_icon.png")),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text("100"),
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        ClipRRect(
-          borderRadius: AppSizes.circleBorder,
-          child: Container(
-            color: Colors.white70,
-            margin: const EdgeInsets.symmetric(vertical: 1),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: const Row(
-              children: [
-                ImageIcon(AssetImage("assets/icons/comment_icon.png")),
-                SizedBox(
-                  width: 5,
-                ),
-                Text("100"),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
 }

@@ -17,18 +17,14 @@ class userRepository {
 
     if (longPressed) {
       postUrl = onlineUrl + loginUrl;
+      CurrentUser.instance.url = onlineUrl;
     }
 
     var body = {
       "email": email,
       "password": password,
     };
-    try {
-      return await loggin(postUrl, body);
-    } on Exception catch (_) {
-      postUrl = onlineUrl + loginUrl;
-      return loggin(postUrl, body);
-    }
+    return loggin(postUrl, body);
   }
 
   static Future<Either<User, UserError>> loggin(
