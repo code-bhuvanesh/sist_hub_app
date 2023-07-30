@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
-import 'package:sist_hub/features/login/login_screen.dart';
-import 'package:sist_hub/features/main/main_screen.dart';
+
+import '../login_page/login_screen.dart';
+import '../main_page/main_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

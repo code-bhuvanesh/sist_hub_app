@@ -4,11 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
-import 'package:sist_hub/features/home/bloc/home_bloc.dart';
-import 'package:sist_hub/features/home/widgets/pull_to_refresh.dart';
+import 'package:sist_hub/features/home_page/widgets/pull_to_refresh.dart';
 import 'package:sist_hub/styles/styles.dart';
 
-import '../login/login_screen.dart';
+import '../login_page/login_screen.dart';
+import 'bloc/home_bloc.dart';
 import 'widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (context, index) => PostWidget(
                                   index: index + 1, post: loadedPosts[index]),
                             )
-                          : isLoadingPost
+                          : !isLoadingPost
                               ? const Center(
                                   child: Text(
                                     "no posts avaliable",

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/common/widgets/logo.dart';
-import 'package:sist_hub/features/login/bloc/login_bloc.dart';
-import 'package:sist_hub/features/main/main_screen.dart';
 import 'package:sist_hub/styles/styles.dart';
 import 'package:sist_hub/utils/utils.dart';
+
+import '../main_page/main_screen.dart';
+import 'bloc/login_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _emailTextController =
-      TextEditingController(text: "bhuvanesh41110296@sist.com");
+      TextEditingController(text: "bhuvanesh41110198@sist.com");
 
   final _passwordTextController = TextEditingController(text: "1234");
 

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:sist_hub/data/repository/user_repository.dart';
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
 
+import '../../../utils/constants.dart';
+
 part 'login_event.dart';
 part 'login_state.dart';
 
@@ -29,7 +31,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (user) {
         print("token : ${user.token}");
         authBloc.add(AuthLogin(user));
-
+        CurrentUser.instance.token = user.token;
         emit(LoginSucessfull());
       },
       (userError) {

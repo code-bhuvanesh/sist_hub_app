@@ -5,7 +5,7 @@ import 'package:photo_gallery/photo_gallery.dart';
 import 'package:sist_hub/common/post_image_viewer.dart';
 
 import '../../../styles/styles.dart';
-import '../add_post/add_post_screen.dart';
+import '../add_post_page/add_post_screen.dart';
 import '../permissions/bloc/permission_bloc.dart';
 import 'bloc/select_post_image_bloc.dart';
 

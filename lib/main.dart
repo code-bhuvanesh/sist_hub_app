@@ -3,21 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 
+import 'features/add_post_page/add_post_screen.dart';
+import 'features/add_post_page/bloc/add_post_bloc.dart';
+import 'features/login_page/bloc/login_bloc.dart';
+import 'features/login_page/login_screen.dart';
+import 'features/main_page/main_screen.dart';
+import 'features/select_post_image_page/bloc/select_post_image_bloc.dart';
+import 'features/select_post_image_page/select_post_image.dart';
 import 'styles/styles.dart';
 import 'transitions/page_transisition.dart';
-import 'features/add_post/add_post_screen.dart';
-import 'features/add_post/bloc/add_post_bloc.dart';
-import 'features/main/main_screen.dart';
 import 'features/permissions/bloc/permission_bloc.dart';
-import 'features/settings/settings_screen.dart';
-import 'features/splahScreen/splash_screen.dart';
-import 'features/login/bloc/login_bloc.dart';
-import 'features/login/login_screen.dart';
+import 'features/settings_page/settings_screen.dart';
+import 'features/splahScreen_page/splash_screen.dart';
 import 'features/auth/bloc/auth_bloc.dart';
-import 'features/select_post_image/bloc/select_post_image_bloc.dart';
-import 'features/select_post_image/select_post_image.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark,

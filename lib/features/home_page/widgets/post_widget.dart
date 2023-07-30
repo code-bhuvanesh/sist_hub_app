@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/home/bloc/home_bloc.dart';
 import 'package:sist_hub/styles/styles.dart';
 import 'package:sist_hub/utils/constants.dart';
 
 import '../../../data/model/post.dart';
+import '../bloc/home_bloc.dart';
 
 class PostWidget extends StatefulWidget {
   final int index;

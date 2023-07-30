@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
 
 import '../../styles/styles.dart';
-import '../login/login_screen.dart';
+import '../login_page/login_screen.dart';
 
 class SettingScreen extends StatefulWidget {
   static const routename = "/settings";

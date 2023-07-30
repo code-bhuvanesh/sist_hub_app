@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:sist_hub/common/post_image_viewer.dart';
-import 'package:sist_hub/features/add_post/bloc/add_post_bloc.dart';
-import 'package:sist_hub/features/main/main_screen.dart';
 import 'package:sist_hub/utils/utils.dart';
 
 import '../../styles/styles.dart';
+import '../main_page/main_screen.dart';
+import 'bloc/add_post_bloc.dart';
 
 class AddPostScreen extends StatefulWidget {
   static const routename = "/addpostscreen";

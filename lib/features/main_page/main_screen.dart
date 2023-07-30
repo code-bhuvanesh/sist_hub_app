@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sist_hub/features/add_post_page/search_page/search_screen.dart';
+import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
+import 'package:sist_hub/features/notifications_page/notifications_screen.dart';
+import 'package:sist_hub/utils/constants.dart';
 
+import '../home_page/bloc/home_bloc.dart';
+import '../home_page/home_screen.dart';
+import '../select_post_image_page/select_post_image.dart';
 import '/styles/styles.dart';
-import '../select_post_image/select_post_image.dart';
-import '../auth/bloc/auth_bloc.dart';
-import '../home/bloc/home_bloc.dart';
-import '../home/home_screen.dart';
-import '../settings/settings_screen.dart';
+import '../settings_page/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -27,11 +30,10 @@ class _MainScreenState extends State<MainScreen> {
   int postionIndex = 0;
   @override
   void initState() {
+    if (CurrentUser.instance.token == null) {
+      context.read<AuthBloc>().add(AppStarted());
+    }
     super.initState();
-  }
-
-  void logout() {
-    context.read<AuthBloc>().add(AuthLogout());
   }
 
   @override
@@ -53,7 +55,10 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   children: [
                     drawerUserInfo(),
-                    const Divider(height: 20, thickness: 1),
+                    // const Divider(
+                    //   thickness: 1,
+                    //   height: 30,
+                    // ),
                     drawerTiles(
                       title: "Upcoming Events",
                       iconImgLoc: "assets/icons/upcoming_events_icon.png",
@@ -69,25 +74,23 @@ class _MainScreenState extends State<MainScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: Column(
-                  children: [
-                    const Divider(
-                      thickness: 1,
-                      height: 30,
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context)
-                          .pushNamed(SettingScreen.routename),
-                      child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: drawerTiles(
-                            title: "settings",
-                            iconImgLoc: "assets/icons/settings_icon.png",
-                          )),
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  const Divider(
+                    thickness: 1,
+                    height: 30,
+                  ),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context)
+                        .pushNamed(SettingScreen.routename),
+                    child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: drawerTiles(
+                          title: "settings",
+                          iconImgLoc: "assets/icons/settings_icon.png",
+                        )),
+                  ),
+                ],
               )
             ],
           ),
@@ -105,15 +108,9 @@ class _MainScreenState extends State<MainScreen> {
               HomeScreen(
                 mainScreenContext: context,
               ),
-              HomeScreen(
-                mainScreenContext: context,
-              ),
-              HomeScreen(
-                mainScreenContext: context,
-              ),
-              HomeScreen(
-                mainScreenContext: context,
-              ),
+              const SearchScreen(),
+              Container(),
+              const NotificationsScreen(),
             ],
           );
         }),
@@ -204,6 +201,11 @@ class _MainScreenState extends State<MainScreen> {
 
   drawerUserInfo() {
     return DrawerHeader(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: Divider.createBorderSide(context, width: 1.0),
+        ),
+      ),
       child: Row(
         children: [
           profilePic(size: 80),
