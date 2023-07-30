@@ -6,6 +6,7 @@ const onlineUrl =
 const loginUrl = "/api/login/";
 const getpostsUrl = "/api/getposts/";
 const addpostsUrl = "/api/addposts/";
+const likOrUnlikpostsUrl = "/api/likeunlikepost/";
 //storage key names
 const keyToken = "token";
 const keyEmail = "email";

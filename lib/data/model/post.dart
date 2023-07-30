@@ -7,7 +7,8 @@ class Post {
   final String description;
   final String postType;
   final DateTime created;
-  final int likes;
+  int likes;
+  bool userLiked;
   final int userId;
   final String username;
   final String? userProfileUrl;
@@ -19,6 +20,7 @@ class Post {
     required this.postType,
     required this.created,
     required this.likes,
+    required this.userLiked,
     required this.userId,
     required this.username,
     this.userProfileUrl,
@@ -32,6 +34,7 @@ class Post {
       'postType': postType,
       'created': created.millisecondsSinceEpoch,
       'likes': likes,
+      'userLiked' : userLiked,
       'userId': userId,
       'username': username,
       'userProfileUrl': userProfileUrl,
@@ -46,6 +49,7 @@ class Post {
       postType: map['postType'] as String,
       created: DateTime.parse(map['created']),
       likes: map['likes'] as int,
+      userLiked: map['userLiked'] as bool,
       userId: map['userId'] as int,
       username: map['username'] as String,
       userProfileUrl: map['userProfileUrl'] as String?,

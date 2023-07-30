@@ -12,12 +12,24 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<LoadPosts>(loadPosts);
+    on<LikeOrUnlikePost>(likedOrUnlikedPost);
   }
 
-  Future<FutureOr<void>> loadPosts(
-      LoadPosts event, Emitter<HomeState> emit) async {
+  FutureOr<void> loadPosts(
+    LoadPosts event,
+    Emitter<HomeState> emit,
+  ) async {
     emit(PostsLoading());
     var loadedPosts = await PostsRepository().getPosts();
     emit(PostsLoaded(posts: loadedPosts));
+  }
+
+  FutureOr<void> likedOrUnlikedPost(
+    LikeOrUnlikePost event,
+    Emitter<HomeState> emit,
+  ) async {
+    var updatedPost = await PostsRepository().likeOrUnlikePost(event.postId);
+    print("got updated post like : ${updatedPost.userLiked}");
+    emit(PostLikedOrUnliked(updatedPost: updatedPost));
   }
 }

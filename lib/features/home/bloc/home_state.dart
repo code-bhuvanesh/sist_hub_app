@@ -9,11 +9,15 @@ abstract class HomeState extends Equatable {
 
 class HomeInitial extends HomeState {}
 
-class PostsLoading extends HomeState{}
+class PostsLoading extends HomeState {}
 
 class PostsLoaded extends HomeState {
   final List<Post> posts;
 
   const PostsLoaded({required this.posts});
+}
 
+class PostLikedOrUnliked extends HomeState {
+  final Post updatedPost;
+  const PostLikedOrUnliked({required this.updatedPost});
 }

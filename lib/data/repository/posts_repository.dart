@@ -54,4 +54,16 @@ class PostsRepository {
     print("server response \n $serverResponse");
     return serverResponse;
   }
+
+  Future<Post> likeOrUnlikePost(int postID) async {
+    var url = Uri.parse(CurrentUser.instance.url + likOrUnlikpostsUrl);
+    Map<String, dynamic> body = {"postid": postID.toString()};
+    var response = await http.post(
+      url,
+      body: body,
+      headers: CurrentUser.instance.getAuthorizationHeader,
+    );
+
+    return Post.fromJson(response.body);
+  }
 }

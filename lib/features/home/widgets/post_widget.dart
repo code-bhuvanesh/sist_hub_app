@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sist_hub/features/home/bloc/home_bloc.dart';
 import 'package:sist_hub/styles/styles.dart';
 import 'package:sist_hub/utils/constants.dart';
 
 import '../../../data/model/post.dart';
 
-class PostWidget extends StatelessWidget {
+class PostWidget extends StatefulWidget {
   final int index;
   final Post post;
 
@@ -13,6 +15,23 @@ class PostWidget extends StatelessWidget {
     super.key,
     required this.post,
   });
+
+  @override
+  State<PostWidget> createState() => _PostWidgetState();
+}
+
+class _PostWidgetState extends State<PostWidget> {
+  void likePost() {
+    context.read<HomeBloc>().add(LikeOrUnlikePost(postId: widget.post.id));
+    setState(() {
+      widget.post.userLiked = !widget.post.userLiked;
+      if (widget.post.userLiked) {
+        widget.post.likes += 1;
+      } else {
+        widget.post.likes -= 1;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +70,7 @@ class PostWidget extends StatelessWidget {
                   child: SizedBox(
                     width: double.infinity,
                     child: Image.network(
-                      CurrentUser.instance.url + post.postimg,
+                      CurrentUser.instance.url + widget.post.postimg,
                       // "assets/dummy/workshop_$index.jpg",
                       fit: BoxFit.fill,
                     ),
@@ -105,62 +124,80 @@ class PostWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(post.username, style: AppTextStyles.postTittleText),
-          Text(post.postType, style: AppTextStyles.postSubTittleText),
+          Text(widget.post.username, style: AppTextStyles.postTittleText),
+          Text(widget.post.postType, style: AppTextStyles.postSubTittleText),
         ],
       ),
     ]);
   }
 
   postBottom() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClipRRect(
-            borderRadius: AppSizes.circleBorder,
-            child: Container(
-              width: 80,
-              color: AppColors.background,
-              margin: const EdgeInsets.symmetric(vertical: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Row(
-                children: [
-                  const ImageIcon(
-                    AssetImage("assets/icons/like_icon.png"),
-                    color: Colors.red,
+    return BlocListener<HomeBloc, HomeState>(
+      listener: (context, state) {
+        if (state is PostLikedOrUnliked) {
+          // setState(() {
+          //   post = state.updatedPost;
+          // });
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: likePost,
+              child: ClipRRect(
+                borderRadius: AppSizes.circleBorder,
+                child: Container(
+                  width: 80,
+                  color: AppColors.background,
+                  margin: const EdgeInsets.symmetric(vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    children: [
+                      widget.post.userLiked
+                          ? const ImageIcon(
+                              AssetImage("assets/icons/like_icon.png"),
+                              color: Colors.red,
+                            )
+                          : const ImageIcon(
+                              AssetImage("assets/icons/unlike_icon.png"),
+                            ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(widget.post.likes.toString()),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(post.likes.toString()),
-                ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          ClipRRect(
-            borderRadius: AppSizes.circleBorder,
-            child: Container(
-              width: 80,
-              color: AppColors.background,
-              margin: const EdgeInsets.symmetric(vertical: 1),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: const Row(
-                children: [
-                  ImageIcon(AssetImage("assets/icons/comment_icon.png")),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text("100"),
-                ],
+            const SizedBox(
+              width: 10,
+            ),
+            ClipRRect(
+              borderRadius: AppSizes.circleBorder,
+              child: Container(
+                width: 80,
+                color: AppColors.background,
+                margin: const EdgeInsets.symmetric(vertical: 1),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: const Row(
+                  children: [
+                    ImageIcon(AssetImage("assets/icons/comment_icon.png")),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text("100"),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

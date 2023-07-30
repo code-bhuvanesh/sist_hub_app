@@ -9,10 +9,9 @@ abstract class HomeEvent extends Equatable {
 
 class LoadPosts extends HomeEvent {}
 
-class LikePost extends HomeEvent {
+class LikeOrUnlikePost extends HomeEvent {
   final int postId;
-
-  const LikePost({required this.postId});
+  const LikeOrUnlikePost({required this.postId});
 }
 
 class CommentOnPost extends HomeEvent {
