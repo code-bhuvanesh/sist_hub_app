@@ -1,17 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
 import 'package:sist_hub/features/home/bloc/home_bloc.dart';
-import 'package:sist_hub/features/settings/settings_screen.dart';
+import 'package:sist_hub/features/home/widgets/pull_to_refresh.dart';
 import 'package:sist_hub/styles/styles.dart';
-import 'package:sist_hub/utils/constants.dart';
 
 import '../login/login_screen.dart';
 import 'widgets/post_widget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final BuildContext mainScreenContext;
+  const HomeScreen({
+    Key? key,
+    required this.mainScreenContext,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,11 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // statusBarBrightness: Brightness.light,
     systemNavigationBarColor: AppColors.postBorder,
   );
+  var loadedPosts = [];
   int postionIndex = 0;
+  var isLoadingPost = false;
   @override
   void initState() {
     super.initState();
-    print("constants url ${CurrentUser.instance.url}");
     context.read<HomeBloc>().add(LoadPosts());
   }
 
@@ -36,61 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<AuthBloc>().add(AuthLogout());
   }
 
+  Future<void> onRefresh() async {
+    context.read<HomeBloc>().add(LoadPosts());
+    Future bloc = context.read<HomeBloc>().stream.first;
+    return await bloc;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: SafeArea(
-        child: Drawer(
-          backgroundColor: AppColors.background,
-          shape: const RoundedRectangleBorder(
-              // borderRadius: BorderRadius.only(
-              //   topRight: Radius.circular(20),
-              //   bottomRight: Radius.circular(20),
-              // ),
-              ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  drawerUserInfo(),
-                  const Divider(height: 20, thickness: 1),
-                  drawerTiles(
-                    title: "Upcoming Events",
-                    iconImgLoc: "assets/icons/upcoming_events_icon.png",
-                  ),
-                  drawerTiles(
-                    title: "Calender",
-                    iconImgLoc: "assets/icons/calender_icon.png",
-                  ),
-                  drawerTiles(
-                    title: "Find your Bus",
-                    iconImgLoc: "assets/icons/bus_icon.png",
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  const Divider(
-                    thickness: 1,
-                    height: 30,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .pushNamed(SettingScreen.routename),
-                    child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: drawerTiles(
-                          title: "settings",
-                          iconImgLoc: "assets/icons/settings_icon.png",
-                        )),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -98,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverAppBar(
               systemOverlayStyle: systemOverlayStyle,
               backgroundColor: AppColors.background,
-              leading: profileButton(context),
+              leading: profileButton(),
               title: const Text(
                 "SIST HUB",
                 style: AppTextStyles.logoTextStyle,
@@ -120,18 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             color: AppColors.background,
             child: Center(
-              child: BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  var loadedPosts = [];
-                  if (state is PostsLoaded) {
-                    loadedPosts = state.posts;
-                  }
-                  if (state is PostsLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    return Expanded(
+              child:
+                  BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
+                if (state is PostsLoaded) {
+                  loadedPosts = state.posts;
+                }
+                if (state is PostsLoading) {
+                  isLoadingPost = true;
+                } else {
+                  isLoadingPost = false;
+                }
+                return Stack(
+                  children: [
+                    PullToRefresh(
+                      onRefresh: onRefresh,
                       child: loadedPosts.isNotEmpty
                           ? ListView.builder(
                               padding: const EdgeInsets.all(5),
@@ -139,14 +101,24 @@ class _HomeScreenState extends State<HomeScreen> {
                               itemBuilder: (context, index) => PostWidget(
                                   index: index + 1, post: loadedPosts[index]),
                             )
-                          : const Text(
-                              "no posts avaliable",
-                              style: AppTextStyles.subTitleTextStyle,
-                            ),
-                    );
-                  }
-                },
-              ),
+                          : isLoadingPost
+                              ? const Center(
+                                  child: Text(
+                                    "no posts avaliable",
+                                    style: AppTextStyles.subTitleTextStyle,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                    ),
+                    if (isLoadingPost)
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                      )
+                  ],
+                );
+              }),
             ),
           ),
         ),
@@ -154,73 +126,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  drawerTiles({required String title, required String iconImgLoc}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: AppSizes.border15,
-        ),
-        elevation: 2,
-        color: AppColors.postBorder,
+  profileButton() {
+    return GestureDetector(
+      onTap: () => Scaffold.of(widget.mainScreenContext).openDrawer(),
+      child: Center(
         child: Container(
-          width: double.infinity,
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  ImageIcon(
-                    AssetImage(iconImgLoc),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    title,
-                    style: AppTextStyles.appDrawerTitleTextStyle,
-                  ),
-                ],
-              )),
-        ),
-      ),
-    );
-  }
-
-  drawerUserInfo() {
-    return DrawerHeader(
-      child: Row(
-        children: [
-          profilePic(size: 80),
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Bhuvanesh",
-                style: AppTextStyles.titleTextStyle,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              ClipRRect(
-                borderRadius: AppSizes.border15,
-                child: Container(
-                  color: AppColors.postBorder,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 3,
-                    horizontal: 5,
-                  ),
-                  child: const Text("view profile"),
-                ),
-              ),
-            ],
-          )
-        ],
+            padding: const EdgeInsets.only(left: 8),
+            // width: 60.0,
+            // height: 50.0,
+            child: profilePic(size: 35)),
       ),
     );
   }
@@ -237,19 +151,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.black87,
           fit: BoxFit.fill,
         ),
-      ),
-    );
-  }
-
-  profileButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Scaffold.of(context).openDrawer(),
-      child: Center(
-        child: Container(
-            padding: const EdgeInsets.only(left: 8),
-            // width: 60.0,
-            // height: 50.0,
-            child: profilePic(size: 35)),
       ),
     );
   }

@@ -88,8 +88,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Center(
         child: ElevatedButton(
-          onPressed: LoginButtonOnPressed,
-          onLongPress: () => LoginButtonOnPressed(longPressed: true),
+          onPressed: loginButtonOnPressed,
+          onLongPress: () => loginButtonOnPressed(longPressed: true),
           style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               foregroundColor:
@@ -153,8 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
     var passwordTextBoxDecoration = InputDecoration(
       suffixIcon: IconButton(
         icon: _passwordNotVisible
-            ? Icon(Icons.visibility_off_outlined)
-            : Icon(Icons.visibility_outlined),
+            ? const Icon(Icons.visibility_off_outlined)
+            : const Icon(Icons.visibility_outlined),
         onPressed: () {
           setState(() {
             _passwordNotVisible = !_passwordNotVisible;
@@ -182,7 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void LoginButtonOnPressed({bool longPressed = false}) {
+  void loginButtonOnPressed({bool longPressed = false}) {
     print("loginPressed");
     context.read<LoginBloc>().add(
           LoginButtonPressed(

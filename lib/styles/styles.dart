@@ -10,6 +10,7 @@ class AppColors {
       Color.fromARGB(255, 246, 246, 246); //#faf7f7 hex value
   static const Color postBackgound = Color.fromARGB(255, 150, 150, 150);
   static const Color postBorder = Colors.white;
+  static const Color blue = Color.fromARGB(255, 33, 54, 243);
 }
 
 class AppTextStyles {

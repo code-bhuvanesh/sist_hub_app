@@ -97,10 +97,10 @@ class PostWidget extends StatelessWidget {
 
   postUserInfo() {
     return Row(children: [
-      CircleAvatar(
+      const CircleAvatar(
         foregroundImage: AssetImage("assets/dummy/hack_sist_logo.jpeg"),
       ),
-      SizedBox(width: 10),
+      const SizedBox(width: 10),
       Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,12 +121,16 @@ class PostWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: AppSizes.circleBorder,
             child: Container(
-              color: Colors.white70,
+              width: 80,
+              color: AppColors.background,
               margin: const EdgeInsets.symmetric(vertical: 1),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Row(
                 children: [
-                  const ImageIcon(AssetImage("assets/icons/like_icon.png")),
+                  const ImageIcon(
+                    AssetImage("assets/icons/like_icon.png"),
+                    color: Colors.red,
+                  ),
                   const SizedBox(
                     width: 5,
                   ),
@@ -141,7 +145,8 @@ class PostWidget extends StatelessWidget {
           ClipRRect(
             borderRadius: AppSizes.circleBorder,
             child: Container(
-              color: Colors.white70,
+              width: 80,
+              color: AppColors.background,
               margin: const EdgeInsets.symmetric(vertical: 1),
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: const Row(

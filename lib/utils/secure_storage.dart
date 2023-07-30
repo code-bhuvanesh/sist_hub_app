@@ -59,7 +59,7 @@ class SecureStorage {
   //   accessibility: IOSAccessibility.first_unlock,
   // );
 
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  // AndroidOptions _getAndroidOptions() => const AndroidOptions(
+  //       encryptedSharedPreferences: true,
+  //     );
 }

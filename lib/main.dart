@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/login/add_posts/add_posts_screen.dart';
-import 'package:sist_hub/features/main/main_screen.dart';
-import 'package:sist_hub/features/settings/settings_screen.dart';
-import 'package:sist_hub/features/splahScreen/splash_screen.dart';
-import 'package:sist_hub/styles/styles.dart';
-import 'package:sist_hub/transitions/page_transisition.dart';
+import 'package:photo_gallery/photo_gallery.dart';
 
+import 'styles/styles.dart';
+import 'transitions/page_transisition.dart';
+import 'features/add_post/add_post_screen.dart';
+import 'features/add_post/bloc/add_post_bloc.dart';
+import 'features/main/main_screen.dart';
+import 'features/permissions/bloc/permission_bloc.dart';
+import 'features/settings/settings_screen.dart';
+import 'features/splahScreen/splash_screen.dart';
+import 'features/login/bloc/login_bloc.dart';
 import 'features/login/login_screen.dart';
 import 'features/auth/bloc/auth_bloc.dart';
+import 'features/select_post_image/bloc/select_post_image_bloc.dart';
+import 'features/select_post_image/select_post_image.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -19,14 +25,55 @@ void main() {
       systemNavigationBarColor: AppColors.background,
     ),
   );
-  runApp(BlocProvider<AuthBloc>(
-    create: (context) => AuthBloc(),
-    child: const MyApp(),
-  ));
+  runApp(
+    MultiBlocProvider(providers: [
+      BlocProvider<AuthBloc>(
+        create: (_) => AuthBloc(),
+      ),
+      BlocProvider<PermissionBloc>(
+        create: (_) => PermissionBloc(),
+      ),
+    ], child: const MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  Route<dynamic> routes(RouteSettings settings) {
+    switch (settings.name) {
+      case SplashScreen.routename:
+        return pageTransition(const SplashScreen());
+      case MainScreen.routeName:
+        return pageTransition(const MainScreen());
+      case LoginScreen.routeName:
+        return pageTransition(
+          BlocProvider(
+            create: (context) => LoginBloc(
+              authBloc: context.read<AuthBloc>(),
+            ),
+            child: const LoginScreen(),
+          ),
+        );
+      case SettingScreen.routename:
+        return pageTransition(const SettingScreen());
+      case SelectPostImageScreen.routename:
+        return slideFromDownPageTransistion(
+          BlocProvider(
+            create: (context) => SelectPostImageBloc(),
+            child: const SelectPostImageScreen(),
+          ),
+        );
+      case AddPostScreen.routename:
+        return slideFromSidePageTransistion(
+          BlocProvider(
+            create: (context) => AddPostBloc(),
+            child: AddPostScreen(postImage: settings.arguments as Medium),
+          ),
+        );
+    }
+    return pageTransition(const SplashScreen());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +98,5 @@ class MyApp extends StatelessWidget {
       //   AddPostsScreen.routename:(context) => SlideUpPageTransistion(newPage)
       // },
     );
-  }
-
-  Route<dynamic> routes(RouteSettings settings) {
-    switch (settings.name) {
-      case SplashScreen.routename:
-        return pageTransition(const SplashScreen());
-      case MainScreen.routeName:
-        return pageTransition(const MainScreen());
-      case LoginScreen.routeName:
-        return pageTransition(const LoginScreen());
-      case SettingScreen.routename:
-        return pageTransition(const SettingScreen());
-      case AddPostsScreen.routename:
-        return SlideUpPageTransistion(const AddPostsScreen());
-    }
-    return pageTransition(const SplashScreen());
   }
 }

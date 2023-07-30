@@ -21,11 +21,9 @@ class SplashScreen extends StatelessWidget {
             Navigator.of(context).popAndPushNamed(LoginScreen.routeName);
           }
         },
-        child: Container(
-          child: const Center(
-              // child: LogoWidget(),
-              ),
-        ),
+        child: const Center(
+            // child: LogoWidget(),
+            ),
       ),
     );
   }

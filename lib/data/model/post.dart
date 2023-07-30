@@ -69,4 +69,4 @@ class Post {
   }
 }
 
-enum PostType { workshop, event, achivement, management, anouncement }
+enum PostType { general, workshop, event, achivement, management, anouncement }
