@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../../utils/constants.dart';
 import '../model/post.dart';
+import '../model/user.dart';
 
 class PostsRepository {
   // static var client = http.Client();
@@ -55,15 +57,33 @@ class PostsRepository {
     return serverResponse;
   }
 
-  Future<Post> likeOrUnlikePost(int postID) async {
-    var url = Uri.parse(CurrentUser.instance.url + likOrUnlikpostsUrl);
-    Map<String, dynamic> body = {"postid": postID.toString()};
-    var response = await http.post(
+  Future<Response> getResponse(String subUrl, body) {
+    var url = Uri.parse(CurrentUser.instance.url + subUrl);
+
+    var response = http.post(
       url,
       body: body,
       headers: CurrentUser.instance.getAuthorizationHeader,
     );
+    return response;
+  }
+
+  Future<OtherUser> getUser(int userID) async {
+    Map<String, dynamic> body = {"userid": userID.toString()};
+    var response = await getResponse(getUserUrl, body);
+    return OtherUser.fromJson(response.body);
+  }
+
+  Future<Post> likeOrUnlikePost(int postID) async {
+    Map<String, dynamic> body = {"postid": postID.toString()};
+    var response = await getResponse(likOrUnlikpostsUrl, body);
 
     return Post.fromJson(response.body);
+  }
+
+  Future<List<PostComment>> getPostComments(int postID) async {
+    Map<String, dynamic> body = {"postid": postID.toString()};
+    var response = await getResponse(getCommentsUrl, body);
+    return PostComment.commentsFromJson(response.body);
   }
 }

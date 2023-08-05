@@ -21,3 +21,10 @@ class PostLikedOrUnliked extends HomeState {
   final Post updatedPost;
   const PostLikedOrUnliked({required this.updatedPost});
 }
+
+class CommentsLoading extends  HomeState{}
+
+class CommentsLoaded extends HomeState {
+  final List<PostComment> comments;
+  const CommentsLoaded({required this.comments});
+}

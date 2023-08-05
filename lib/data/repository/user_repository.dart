@@ -18,6 +18,10 @@ class userRepository {
     if (longPressed) {
       postUrl = onlineUrl + loginUrl;
       CurrentUser.instance.url = onlineUrl;
+      CurrentUser.instance.saveUrl();
+    } else {
+      CurrentUser.instance.url = localUrl;
+      CurrentUser.instance.saveUrl();
     }
 
     var body = {

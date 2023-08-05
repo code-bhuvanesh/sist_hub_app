@@ -14,6 +14,11 @@ class LikeOrUnlikePost extends HomeEvent {
   const LikeOrUnlikePost({required this.postId});
 }
 
+class GetCommentsForPost extends HomeEvent {
+  final int postId;
+  const GetCommentsForPost({required this.postId});
+}
+
 class CommentOnPost extends HomeEvent {
   final int postId;
   final String comment;

@@ -24,6 +24,15 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
+  static const commentTitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const commentSubTitle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: Color.fromARGB(255, 97, 97, 97));
 
   static const postSubTittleText = TextStyle(
     fontSize: 12,
@@ -54,6 +63,10 @@ class AppSizes {
   static BorderRadius postTopSideBorder = BorderRadius.only(
     topLeft: Radius.circular(radius15),
     topRight: Radius.circular(radius15),
+  );
+    static BorderRadius commentTopSideBorder = BorderRadius.only(
+    topLeft: Radius.circular(radius25),
+    topRight: Radius.circular(radius25),
   );
   static double radius8 = 8;
   static BorderRadius border8 = BorderRadius.circular(radius8);

@@ -80,45 +80,69 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             color: AppColors.background,
             child: Center(
-              child:
-                  BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state is PostsLoaded) {
-                  loadedPosts = state.posts;
-                }
-                if (state is PostsLoading) {
-                  isLoadingPost = true;
-                } else {
-                  isLoadingPost = false;
-                }
-                return Stack(
-                  children: [
-                    PullToRefresh(
-                      onRefresh: onRefresh,
-                      child: loadedPosts.isNotEmpty
-                          ? ListView.builder(
-                              padding: const EdgeInsets.all(5),
-                              itemCount: loadedPosts.length,
-                              itemBuilder: (context, index) => PostWidget(
-                                  index: index + 1, post: loadedPosts[index]),
-                            )
-                          : !isLoadingPost
-                              ? const Center(
-                                  child: Text(
-                                    "no posts avaliable",
-                                    style: AppTextStyles.subTitleTextStyle,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                    ),
-                    if (isLoadingPost)
-                      const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      )
-                  ],
-                );
-              }),
+              child: BlocConsumer<HomeBloc, HomeState>(
+                listener: (context, state) {
+                  if (state is PostsLoaded) {
+                    loadedPosts = state.posts;
+                  }
+                  if (state is PostsLoading) {
+                    isLoadingPost = true;
+                  } else {
+                    isLoadingPost = false;
+                  }
+                },
+                builder: (context, state) {
+                  return Stack(
+                    children: [
+                      PullToRefresh(
+                        onRefresh: onRefresh,
+                        child: loadedPosts.isNotEmpty
+                            ? ListView.builder(
+                                padding: const EdgeInsets.all(5),
+                                itemCount: loadedPosts.length,
+                                itemBuilder: (context, index) => PostWidget(
+                                  index: index + 1,
+                                  post: loadedPosts[index],
+                                  parentContext: context,
+                                ),
+                              )
+                            : !isLoadingPost
+                                ? Stack(
+                                    children: [
+                                      const Center(
+                                        child: Text(
+                                          "no posts avaliable",
+                                          style:
+                                              AppTextStyles.subTitleTextStyle,
+                                        ),
+                                      ),
+                                      SingleChildScrollView(
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height -
+                                              MediaQuery.of(context)
+                                                  .padding
+                                                  .top -
+                                              MediaQuery.of(context)
+                                                  .padding
+                                                  .bottom,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const SizedBox.shrink(),
+                      ),
+                      if (isLoadingPost)
+                        const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ),

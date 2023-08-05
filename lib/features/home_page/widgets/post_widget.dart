@@ -1,26 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sist_hub/styles/styles.dart';
-import 'package:sist_hub/utils/constants.dart';
 
 import '../../../data/model/post.dart';
 import '../bloc/home_bloc.dart';
+import 'comments_bottom_sheet.dart';
+import 'custom_bootom_sheet.dart';
 
 class PostWidget extends StatefulWidget {
   final int index;
   final Post post;
+  final BuildContext parentContext;
 
-  const PostWidget({
-    required this.index,
-    super.key,
-    required this.post,
-  });
+  const PostWidget(
+      {required this.index,
+      super.key,
+      required this.post,
+      required this.parentContext});
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  bool imageFullScreen = true;
+  bool isHeightisBigger = true;
+
   void likePost() {
     context.read<HomeBloc>().add(LikeOrUnlikePost(postId: widget.post.id));
     setState(() {
@@ -69,10 +75,28 @@ class _PostWidgetState extends State<PostWidget> {
                   borderRadius: AppSizes.border15,
                   child: SizedBox(
                     width: double.infinity,
-                    child: Image.network(
-                      CurrentUser.instance.url + widget.post.postimg,
-                      // "assets/dummy/workshop_$index.jpg",
-                      fit: BoxFit.fill,
+                    // child: Image.network(
+                    //   widget.post.postimg,
+                    //   // "assets/dummy/workshop_$index.jpg",
+                    //   fit: BoxFit.fill,
+                    // ),
+                    child: GestureDetector(
+                      onTap: () => setState(() {
+                        imageFullScreen = !imageFullScreen;
+                      }),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.post.postimg,
+                        // fit: imageFullScreen ? BoxFit.fill : BoxFit.contain,
+                        fit: BoxFit.fill,
+                        // errorWidget: (context, url, error) => Center(
+                        //   child: Column(
+                        //     children: [
+                        //       const Icon(Icons.error),
+                        //       Text(error.toString())
+                        //     ],
+                        //   ),
+                        // ),
+                      ),
                     ),
                   ),
                 ),
@@ -177,22 +201,51 @@ class _PostWidgetState extends State<PostWidget> {
             const SizedBox(
               width: 10,
             ),
-            ClipRRect(
-              borderRadius: AppSizes.circleBorder,
-              child: Container(
-                width: 80,
-                color: AppColors.background,
-                margin: const EdgeInsets.symmetric(vertical: 1),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: const Row(
-                  children: [
-                    ImageIcon(AssetImage("assets/icons/comment_icon.png")),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Text("100"),
-                  ],
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: AppSizes.commentTopSideBorder,
+                  ),
+                  backgroundColor: AppColors.postBorder,
+                  context: context,
+                  builder: (context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: BlocProvider(
+                          create: (context) => HomeBloc(),
+                          // child: CustomBottomSheet(
+                          // child: CommentsBottomSheet(
+                          //   postID: widget.post.id,
+                          // ),
+                          //  ),
+                          child: CustomBottomSheet(
+                            child: CommentsBottomSheet(postID: widget.post.id),
+                          )),
+                    );
+                  },
+                );
+              },
+              child: ClipRRect(
+                borderRadius: AppSizes.circleBorder,
+                child: Container(
+                  width: 80,
+                  color: AppColors.background,
+                  margin: const EdgeInsets.symmetric(vertical: 1),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: Row(
+                    children: [
+                      const ImageIcon(
+                          AssetImage("assets/icons/comment_icon.png")),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(widget.post.comments.toString()),
+                    ],
+                  ),
                 ),
               ),
             ),

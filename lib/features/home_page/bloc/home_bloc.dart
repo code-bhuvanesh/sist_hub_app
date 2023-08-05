@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<LoadPosts>(loadPosts);
     on<LikeOrUnlikePost>(likedOrUnlikedPost);
+    on<GetCommentsForPost>(getCommentsForPost);
   }
 
   FutureOr<void> loadPosts(
@@ -31,5 +32,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     var updatedPost = await PostsRepository().likeOrUnlikePost(event.postId);
     print("got updated post like : ${updatedPost.userLiked}");
     emit(PostLikedOrUnliked(updatedPost: updatedPost));
+  }
+
+  Future<FutureOr<void>> getCommentsForPost(
+    GetCommentsForPost event,
+    Emitter<HomeState> emit,
+  ) async {
+    emit(CommentsLoading());
+    List<PostComment> comments =
+        await PostsRepository().getPostComments(event.postId);
+    emit(CommentsLoaded(comments: comments));
   }
 }

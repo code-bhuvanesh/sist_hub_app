@@ -9,11 +9,11 @@ abstract class AuthState extends Equatable {
 class AuthInitial extends AuthState {}
 
 class AuthReadUser extends AuthState {
-  final User user;
+  final OtherUser user;
 
   AuthReadUser(this.user);
 
-   @override
+  @override
   List<Object?> get props => [user];
 }
 
