@@ -86,4 +86,18 @@ class PostsRepository {
     var response = await getResponse(getCommentsUrl, body);
     return PostComment.commentsFromJson(response.body);
   }
+
+  Future<String> addComment({
+    required int postID,
+    required String comment,
+  }) async {
+    Map<String, dynamic> body = {
+      "post": postID.toString(),
+      "comment": comment,
+      "isSubComment": false.toString(),
+    };
+    var response = await getResponse(addCommentsUrl, body);
+    return response.body;
+  }
 }
+

@@ -115,8 +115,8 @@ class PostComment {
     return PostComment(
       id: map['id'] as int,
       comment: map['comment'] as String,
-      postId: map['post_id'] as int,
-      userId: map['user_id'] as int,
+      postId: map['post'] as int,
+      userId: map['user'] as int,
       created: DateTime.parse(map['created']),
       parentCommentId:
           map['parentCommentId'] != null ? map['parentCommentId'] as int : null,

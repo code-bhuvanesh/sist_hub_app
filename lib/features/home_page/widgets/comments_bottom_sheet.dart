@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +20,9 @@ class CommentsBottomSheet extends StatefulWidget {
 
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   bool isLoading = false;
+  bool isSendingComment = false;
   List<PostComment> comments = [];
+  final TextEditingController commentTextController = TextEditingController();
   @override
   void initState() {
     context.read<HomeBloc>().add(GetCommentsForPost(postId: widget.postID));
@@ -31,16 +32,30 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<HomeBloc, HomeState>(
-      listener: (context, state) {
+      listener: (bloccontext, state) {
         if (state is CommentsLoading) {
           setState(() {
-            isLoading = true;
+            if (comments.isEmpty) {
+              isLoading = true;
+            }
           });
-        }
-        if (state is CommentsLoaded) {
+        } else if (state is CommentsLoaded) {
           setState(() {
             isLoading = false;
             comments = state.comments;
+          });
+        } else if (state is SendingComment) {
+          setState(() {
+            isSendingComment = true;
+          });
+        } else if (state is CommentAdded) {
+          // context
+          //     .read<HomeBloc>()
+          //     .add(GetCommentsForPost(postId: widget.postID));
+          setState(() {
+            commentTextController.text = "";
+            isSendingComment = false;
+            comments.insert(0, state.comment);
           });
         }
       },
@@ -71,7 +86,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                           ? ListView.builder(
                               itemBuilder: (context, index) {
                                 return CommetWidget(
-                                  comment: comments[0],
+                                  comment: comments[index],
                                   user: OtherUser(
                                     email: "emil.com",
                                     token: "fsdfsdfs",
@@ -80,17 +95,57 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                   ),
                                 );
                               },
-                              itemCount: 15, //comments.length,
+                              itemCount: comments.length,
                             )
                           : const Center(
                               child: Text("No Comments yet!"),
                             ),
                 ),
               ),
-              Container(
+              Padding(
                 padding: const EdgeInsets.all(10),
+                // color: Colors.transparent,
                 child: TextField(
+                  controller: commentTextController,
                   decoration: InputDecoration(
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 12),
+                      child: Container(
+                        height: 20,
+                        width: 20,
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        child: profilePic(size: 20),
+                      ),
+                    ),
+
+                    suffixIcon: IconButton(
+                      icon: !isSendingComment
+                          ? const Icon(
+                              Icons.send,
+                              color: Colors.black,
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.all(6),
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            ),
+                      onPressed: () {
+                        context.read<HomeBloc>().add(
+                              AddCommentOnPost(
+                                postId: widget.postID,
+                                comment: commentTextController.text,
+                              ),
+                            );
+                      },
+                    ),
+
+                    // prefixIcon: Icon(Icons.person),
+                    hintText: "add your comments...",
                     filled: true,
                     fillColor: Colors.white,
                     focusColor: Colors.white,
@@ -109,12 +164,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 }
 
 class CommetWidget extends StatelessWidget {
+  final bool isLoading;
   final PostComment comment;
   final OtherUser user;
   const CommetWidget({
     Key? key,
     required this.comment,
     required this.user,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
@@ -163,32 +220,32 @@ class CommetWidget extends StatelessWidget {
       ),
     );
   }
+}
 
-  profileButton() {
-    return GestureDetector(
-      child: Center(
-        child: Container(
-            padding: const EdgeInsets.only(left: 8),
-            // width: 60.0,
-            // height: 50.0,
-            child: profilePic(size: 35)),
-      ),
-    );
-  }
-
-  profilePic({required double size}) {
-    return ClipRRect(
-      borderRadius: AppSizes.circleBorder,
+profileButton() {
+  return GestureDetector(
+    child: Center(
       child: Container(
-        height: size,
-        width: size,
-        color: Colors.grey[300],
-        child: Image.asset(
-          "assets/images/user_icon.png",
-          color: Colors.black87,
-          fit: BoxFit.fill,
-        ),
+          padding: const EdgeInsets.only(left: 8),
+          // width: 60.0,
+          // height: 50.0,
+          child: profilePic(size: 35)),
+    ),
+  );
+}
+
+profilePic({required double size}) {
+  return ClipRRect(
+    borderRadius: AppSizes.circleBorder,
+    child: Container(
+      height: size,
+      width: size,
+      color: Colors.grey[300],
+      child: Image.asset(
+        "assets/images/user_icon.png",
+        color: Colors.black87,
+        fit: BoxFit.fill,
       ),
-    );
-  }
+    ),
+  );
 }

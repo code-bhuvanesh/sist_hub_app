@@ -88,14 +88,14 @@ class _PostWidgetState extends State<PostWidget> {
                         imageUrl: widget.post.postimg,
                         // fit: imageFullScreen ? BoxFit.fill : BoxFit.contain,
                         fit: BoxFit.fill,
-                        // errorWidget: (context, url, error) => Center(
-                        //   child: Column(
-                        //     children: [
-                        //       const Icon(Icons.error),
-                        //       Text(error.toString())
-                        //     ],
-                        //   ),
-                        // ),
+                        errorWidget: (context, url, error) => Center(
+                          child: Column(
+                            children: [
+                              const Icon(Icons.error),
+                              Text(error.toString())
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),

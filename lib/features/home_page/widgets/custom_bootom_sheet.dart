@@ -25,7 +25,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     _minHeight = _screenHeight *
         0.5; // 10% of the screen height, you can adjust this as needed.
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: GestureDetector(
         onVerticalDragStart: _onDragStart,
@@ -36,15 +36,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           height: _screenHeight * _currentPosition,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey,
-                blurRadius: 10.0,
-                spreadRadius: 2.0,
-                offset: Offset(0.0, -1.0),
-              ),
-            ],
+            borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
           ),
           child: Column(
             children: [
