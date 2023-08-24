@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+import 'package:sist_hub/features/profile_page/profile_page.dart';
 
 import 'features/add_post_page/add_post_screen.dart';
 import 'features/add_post_page/bloc/add_post_bloc.dart';
@@ -55,6 +56,12 @@ class MyApp extends StatelessWidget {
               authBloc: context.read<AuthBloc>(),
             ),
             child: const LoginScreen(),
+          ),
+        );
+      case ProfilePage.routename:
+        return pageTransition(
+          ProfilePage(
+            userId: settings.arguments as int,
           ),
         );
       case SettingScreen.routename:

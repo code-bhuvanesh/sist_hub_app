@@ -68,7 +68,7 @@ class PostsRepository {
     return response;
   }
 
-  Future<OtherUser> getUser(int userID) async {
+  Future<OtherUser> getOtherUser(int userID) async {
     Map<String, dynamic> body = {"userid": userID.toString()};
     var response = await getResponse(getUserUrl, body);
     return OtherUser.fromJson(response.body);
@@ -100,4 +100,3 @@ class PostsRepository {
     return response.body;
   }
 }
-

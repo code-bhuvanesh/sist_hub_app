@@ -9,19 +9,20 @@ class userRepository {
   static var storage = SecureStorage();
 
   static var client = http.Client();
-  static Future<Either<User, UserError>> loginUser(
-      {required String email,
-      required String password,
-      required bool longPressed}) async {
+  static Future<Either<User, UserError>> loginUser({
+    required String email,
+    required String password,
+    required bool longPressed,
+  }) async {
     var postUrl = localUrl + loginUrl;
 
     if (longPressed) {
       postUrl = onlineUrl + loginUrl;
       CurrentUser.instance.url = onlineUrl;
-      CurrentUser.instance.saveUrl();
+      CurrentUser.instance.saveDefaults();
     } else {
       CurrentUser.instance.url = localUrl;
-      CurrentUser.instance.saveUrl();
+      CurrentUser.instance.saveDefaults();
     }
 
     var body = {
@@ -32,8 +33,10 @@ class userRepository {
   }
 
   static Future<Either<User, UserError>> loggin(
-      String postUrl, Map<String, String> body) async {
-    var response = await client.post(Uri.parse(postUrl), body: body);
+    String loginUrl,
+    Map<String, String> body,
+  ) async {
+    var response = await client.post(Uri.parse(loginUrl), body: body);
     print("response code : ${response.statusCode}");
     // print(postUrl);
     // print(response.body);
@@ -47,5 +50,20 @@ class userRepository {
     } else {
       return Right(UserError.fromJson(response.body));
     }
+  }
+
+  static Future<User> getUser(String id) async {
+    var response = await client.post(
+      Uri.parse(
+        CurrentUser.instance.url + getUserUrl,
+      ),
+      headers: CurrentUser.instance.getAuthorizationHeader,
+      body: {"userid": id},
+    );
+
+    User user = User.fromJson(response.body);
+    // User user = User(email: "", id: "3", token: "", userName: "");
+
+    return user;
   }
 }

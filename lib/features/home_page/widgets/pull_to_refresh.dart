@@ -36,7 +36,7 @@ class _PullToRefreshState extends State<PullToRefresh>
           setState(() {
             _renderStarted = false;
           });
-        } else {
+        } else if (change.didChange(to: IndicatorState.loading)) {
           _renderStarted = true;
         }
       },

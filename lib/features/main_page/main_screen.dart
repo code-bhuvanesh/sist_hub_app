@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/add_post_page/search_page/search_screen.dart';
+import 'package:sist_hub/features/profile_page/profile_page.dart';
+import 'package:sist_hub/features/search_page/search_screen.dart';
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
 import 'package:sist_hub/features/notifications_page/notifications_screen.dart';
 import 'package:sist_hub/utils/constants.dart';
@@ -81,14 +82,20 @@ class _MainScreenState extends State<MainScreen> {
                     height: 30,
                   ),
                   GestureDetector(
+                    onTap: () {},
+                    child: drawerTiles(
+                      title: "Emergency",
+                      iconImgLoc: "assets/icons/emergency_icon.png",
+                      iconColor: Colors.redAccent,
+                    ),
+                  ),
+                  GestureDetector(
                     onTap: () => Navigator.of(context)
                         .pushNamed(SettingScreen.routename),
-                    child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: drawerTiles(
-                          title: "settings",
-                          iconImgLoc: "assets/icons/settings_icon.png",
-                        )),
+                    child: drawerTiles(
+                      title: "settings",
+                      iconImgLoc: "assets/icons/settings_icon.png",
+                    ),
                   ),
                 ],
               )
@@ -165,7 +172,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  drawerTiles({required String title, required String iconImgLoc}) {
+  drawerTiles({
+    required String title,
+    required String iconImgLoc,
+    Color? iconColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Card(
@@ -184,6 +195,7 @@ class _MainScreenState extends State<MainScreen> {
                 children: [
                   ImageIcon(
                     AssetImage(iconImgLoc),
+                    color: iconColor,
                   ),
                   const SizedBox(
                     width: 10,
@@ -231,7 +243,12 @@ class _MainScreenState extends State<MainScreen> {
                     vertical: 3,
                     horizontal: 5,
                   ),
-                  child: const Text("view profile"),
+                  child: GestureDetector(
+                      onTap: () => Navigator.of(context).popAndPushNamed(
+                            ProfilePage.routename,
+                            arguments: CurrentUser.instance.user.id,
+                          ),
+                      child: const Text(" view profile ")),
                 ),
               ),
             ],

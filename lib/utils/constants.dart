@@ -1,11 +1,15 @@
 //urls
 
+import 'package:sist_hub/data/repository/user_repository.dart';
 import 'package:sist_hub/utils/secure_storage.dart';
+
+import '../data/model/user.dart';
 
 const localUrl = "http://192.168.29.180:8000";
 // const localUrl = "https://sist-hub-backend.vercel.app";
 const onlineUrl =
-    "https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.preview.app.github.dev";
+    "https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.app.github.dev";
+// https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.app.github.dev/
 const loginUrl = "/api/login/";
 const getpostsUrl = "/api/getposts/";
 const addpostsUrl = "/api/addposts/";
@@ -21,6 +25,8 @@ class CurrentUser {
   static final CurrentUser instance = CurrentUser._();
   String url = localUrl;
   String? token;
+  late int userId;
+  late User user;
   CurrentUser._() {
     loadDefaults();
     // if (token == null) {
@@ -35,10 +41,15 @@ class CurrentUser {
     }
     var t = await SecureStorage().readSecureData(keyToken);
     token = (t.isNotEmpty) ? t : null;
+
+    //TODO: store user id at login
+    userId = 3;
+    user = await userRepository.getUser(userId.toString());
   }
 
-  void saveUrl() async {
+  void saveDefaults() async {
     await SecureStorage().writeSecureData("url", url);
+    await SecureStorage().writeSecureData("userid", user.id.toString());
   }
 
   get getAuthorizationHeader {

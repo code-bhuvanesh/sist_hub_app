@@ -102,6 +102,7 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
                   );
             } else if (state is ImagesLoaded) {
               _media = state.mediums;
+              
             }
 
             return SafeArea(
@@ -151,8 +152,10 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
                               setState(() {
                                 _selectedValue = value!;
                                 context.read<SelectPostImageBloc>().add(
-                                    GetImagesFromAlbums(
-                                        album: _selectedValue!));
+                                      GetImagesFromAlbums(
+                                        album: _selectedValue!,
+                                      ),
+                                    );
                               });
                             },
                           ),

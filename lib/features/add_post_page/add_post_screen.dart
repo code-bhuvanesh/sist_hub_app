@@ -23,6 +23,7 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController _decription = TextEditingController();
   File? _uploadFile;
+  bool isPosting = false;
 
   @override
   void initState() {
@@ -60,6 +61,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
           TextButton(
             onPressed: () {
               if (_uploadFile != null) {
+                setState(() {
+                  isPosting = true;
+                });
                 context.read<AddPostBloc>().add(AddPostToServer(
                       discription: _decription.text,
                       file: _uploadFile!,
@@ -81,55 +85,71 @@ class _AddPostScreenState extends State<AddPostScreen> {
       body: BlocListener<AddPostBloc, AddPostState>(
         listener: (_, state) {
           if (state is PostsAddedSucessfully) {
+            setState(() {
+              isPosting = false;
+            });
             showToast(msg: "sucessfully posted");
             Navigator.of(context).pushNamedAndRemoveUntil(
               MainScreen.routeName,
               (route) => false,
             );
           } else if (state is PostsAddedUnsucessful) {
+            setState(() {
+              isPosting = false;
+            });
             showToast(msg: "error adding posts");
           }
         },
-        child: Container(
-          color: AppColors.postBorder,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: PostImageViewer(
-                  image: widget.postImage,
-                ),
-              ),
-              Flexible(
-                child: Container(
-                  margin: const EdgeInsets.all(15),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: AppSizes.border15,
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            color: AppColors.background,
-                            child: TextField(
-                              controller: _decription,
-                              maxLength: 100,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 8,
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "write description here",
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+        child: Stack(
+          children: [
+            Container(
+              color: AppColors.postBorder,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: PostImageViewer(
+                      image: widget.postImage,
                     ),
                   ),
+                  Flexible(
+                    child: Container(
+                      margin: const EdgeInsets.all(15),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ClipRRect(
+                              borderRadius: AppSizes.border15,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                color: AppColors.background,
+                                child: TextField(
+                                  controller: _decription,
+                                  maxLength: 100,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: 8,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "write description here",
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            if (isPosting)
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black,
                 ),
               )
-            ],
-          ),
+          ],
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:sist_hub/data/model/post.dart';
 import 'package:sist_hub/styles/styles.dart';
 
 import '../../../data/model/user.dart';
+import '../../../utils/utils.dart';
 import '../bloc/home_bloc.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -88,8 +89,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                 return CommetWidget(
                                   comment: comments[index],
                                   user: OtherUser(
+                                    id: 4,
                                     email: "emil.com",
-                                    token: "fsdfsdfs",
                                     username: "bhuvanesh",
                                     usertype: "student",
                                   ),
@@ -199,8 +200,8 @@ class CommetWidget extends StatelessWidget {
                       const SizedBox(
                         width: 5,
                       ),
-                      const Text(
-                        "5m ago",
+                      Text(
+                        getTimeDiffernce(comment.created),
                         style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w400,
