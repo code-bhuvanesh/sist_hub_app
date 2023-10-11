@@ -69,5 +69,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<FutureOr<void>> _deleteUser() async {
     await stroage.deleteSecureData(keyToken);
     await stroage.deleteSecureData(keyEmail);
+    await stroage.deleteSecureData("userid");
   }
 }

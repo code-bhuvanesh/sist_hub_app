@@ -85,7 +85,6 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
       ),
       body: BlocListener<PermissionBloc, PermissionState>(
         listener: (_, state) {
-          print("...........................................");
           if (state is PermissionGranted) {
             context.read<SelectPostImageBloc>().add(const GetAlbums());
           }

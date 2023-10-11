@@ -20,7 +20,7 @@ class PostsRepository {
       var url = CurrentUser.instance.url + getpostsUrl;
       var response = await http.get(
         Uri.parse(url),
-        headers: CurrentUser.instance.getAuthorizationHeader,
+        headers: await CurrentUser.instance.getAuthorizationHeader,
       );
       posts = Post.PostsFromJson(response.body);
     } on Exception catch (e) {
@@ -37,7 +37,7 @@ class PostsRepository {
     var url = Uri.parse(CurrentUser.instance.url + addpostsUrl);
     var request = http.MultipartRequest("POST", url);
     request.headers.addAll(
-      CurrentUser.instance.getAuthorizationHeader,
+      await CurrentUser.instance.getAuthorizationHeader,
     );
     request.fields["description"] = description;
     request.fields["postType"] = postType;
@@ -57,13 +57,13 @@ class PostsRepository {
     return serverResponse;
   }
 
-  Future<Response> getResponse(String subUrl, body) {
+  Future<Response> getResponse(String subUrl, body) async {
     var url = Uri.parse(CurrentUser.instance.url + subUrl);
 
     var response = http.post(
       url,
       body: body,
-      headers: CurrentUser.instance.getAuthorizationHeader,
+      headers: await CurrentUser.instance.getAuthorizationHeader,
     );
     return response;
   }

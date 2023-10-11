@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:sist_hub/features/profile_page/profile_page.dart';
+import 'package:sist_hub/features/search_page/search_result_screen.dart';
 
 import 'features/add_post_page/add_post_screen.dart';
 import 'features/add_post_page/bloc/add_post_bloc.dart';
@@ -80,6 +81,11 @@ class MyApp extends StatelessWidget {
             child: AddPostScreen(postImage: settings.arguments as Medium),
           ),
         );
+      case SearchResultScreen.routename:
+        return slideFromSidePageTransistion(BlocProvider(
+          create: (context) => AddPostBloc(),
+          child: SearchResultScreen(searchText: settings.arguments as String),
+        ));
     }
     return pageTransition(const SplashScreen());
   }

@@ -35,8 +35,8 @@ class AppTextStyles {
       color: Color.fromARGB(255, 97, 97, 97));
 
   static const postSubTittleText = TextStyle(
-    fontSize: 12,
-    fontWeight: FontWeight.w300,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
   );
 
   static const titleTextStyle = TextStyle(
@@ -51,6 +51,11 @@ class AppTextStyles {
     fontSize: 15,
     fontWeight: FontWeight.w400,
   );
+  static const buttonTextStyle = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    color: Colors.white,
+  );
 }
 
 class AppSizes {
@@ -64,7 +69,7 @@ class AppSizes {
     topLeft: Radius.circular(radius15),
     topRight: Radius.circular(radius15),
   );
-    static BorderRadius commentTopSideBorder = BorderRadius.only(
+  static BorderRadius commentTopSideBorder = BorderRadius.only(
     topLeft: Radius.circular(radius25),
     topRight: Radius.circular(radius25),
   );

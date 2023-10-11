@@ -41,7 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
               greetingText(),
               emptySpace(15),
               loginTextField(
-                  controller: _emailTextController, hintText: "Email"),
+                controller: _emailTextController,
+                hintText: "Email",
+              ),
               loginTextField(
                   controller: _passwordTextController,
                   hintText: "Password",
@@ -187,9 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
     print("loginPressed");
     context.read<LoginBloc>().add(
           LoginButtonPressed(
-              email: _emailTextController.text,
-              password: _passwordTextController.text,
-              longPressed: longPressed),
+            email: _emailTextController.text,
+            password: _passwordTextController.text,
+            longPressed: longPressed,
+          ),
         );
   }
 }

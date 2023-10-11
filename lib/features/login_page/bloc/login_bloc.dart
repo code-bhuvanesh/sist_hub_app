@@ -18,7 +18,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginButtonPressed>(onLoginPressed);
   }
   FutureOr<void> onLoginPressed(
-      LoginButtonPressed event, Emitter<LoginState> emit) async {
+    LoginButtonPressed event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(LoginLoading());
     var email = event.email;
     var password = event.password;
@@ -35,6 +37,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginSucessfull());
       },
       (userError) {
+        print("token : error");
         emit(LoginFailure(error: userError.error));
       },
     );

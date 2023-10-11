@@ -25,7 +25,6 @@ class SecureStorage {
       print(e);
     }
   }
-
   Future<String> readSecureData(String key) async {
     String value = "";
     try {

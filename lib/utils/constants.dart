@@ -1,5 +1,3 @@
-//urls
-
 import 'package:sist_hub/data/repository/user_repository.dart';
 import 'package:sist_hub/utils/secure_storage.dart';
 
@@ -25,8 +23,8 @@ class CurrentUser {
   static final CurrentUser instance = CurrentUser._();
   String url = localUrl;
   String? token;
-  late int userId;
-  late User user;
+  int? userId = 0;
+  User? user;
   CurrentUser._() {
     loadDefaults();
     // if (token == null) {
@@ -41,18 +39,23 @@ class CurrentUser {
     }
     var t = await SecureStorage().readSecureData(keyToken);
     token = (t.isNotEmpty) ? t : null;
-
-    //TODO: store user id at login
-    userId = 3;
-    user = await userRepository.getUser(userId.toString());
+    var uid = await SecureStorage().readSecureData("userid");
+    userId = (uid.isNotEmpty) ? int.parse(uid) : null;
+    if (userId != null) {
+      user = await userRepository.getUser(userId.toString());
+    }
   }
 
   void saveDefaults() async {
     await SecureStorage().writeSecureData("url", url);
-    await SecureStorage().writeSecureData("userid", user.id.toString());
+    await SecureStorage().writeSecureData("userid", user!.id.toString());
   }
 
-  get getAuthorizationHeader {
+  get getAuthorizationHeader async {
+    if (token == null) {
+      var t = await SecureStorage().readSecureData(keyToken);
+      token = (t.isNotEmpty) ? t : null;
+    }
     return {"Authorization": "Token $token"};
   }
 }

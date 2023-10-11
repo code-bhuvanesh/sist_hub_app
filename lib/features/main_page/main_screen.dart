@@ -72,6 +72,10 @@ class _MainScreenState extends State<MainScreen> {
                       title: "Find your Bus",
                       iconImgLoc: "assets/icons/bus_icon.png",
                     ),
+                    drawerTiles(
+                      title: "Order in Canteen",
+                      iconImgLoc: "assets/icons/food_icon.png",
+                    ),
                   ],
                 ),
               ),
@@ -246,7 +250,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: GestureDetector(
                       onTap: () => Navigator.of(context).popAndPushNamed(
                             ProfilePage.routename,
-                            arguments: CurrentUser.instance.user.id,
+                            arguments: CurrentUser.instance.user!.id,
                           ),
                       child: const Text(" view profile ")),
                 ),
