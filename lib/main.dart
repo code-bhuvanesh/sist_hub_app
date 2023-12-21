@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+import 'package:sist_hub/features/bus_page/find_bus_screen.dart';
+import 'package:sist_hub/features/create_new_post_page/create_post_page.dart';
 import 'package:sist_hub/features/profile_page/profile_page.dart';
 import 'package:sist_hub/features/search_page/search_result_screen.dart';
 
 import 'features/add_post_page/add_post_screen.dart';
 import 'features/add_post_page/bloc/add_post_bloc.dart';
+import 'features/create_new_post_page/bloc/select_post_image_bloc.dart';
+import 'features/create_new_post_page/select_post_image.dart';
 import 'features/login_page/bloc/login_bloc.dart';
 import 'features/login_page/login_screen.dart';
 import 'features/main_page/main_screen.dart';
-import 'features/select_post_image_page/bloc/select_post_image_bloc.dart';
-import 'features/select_post_image_page/select_post_image.dart';
 import 'styles/styles.dart';
 import 'transitions/page_transisition.dart';
 import 'features/permissions/bloc/permission_bloc.dart';
@@ -37,6 +39,9 @@ void main() {
       BlocProvider<PermissionBloc>(
         create: (_) => PermissionBloc(),
       ),
+      BlocProvider<CreateNewPostBloc>(
+        create: (_) => CreateNewPostBloc(),
+      )
     ], child: const MyApp()),
   );
 }
@@ -69,10 +74,11 @@ class MyApp extends StatelessWidget {
         return pageTransition(const SettingScreen());
       case SelectPostImageScreen.routename:
         return slideFromDownPageTransistion(
-          BlocProvider(
-            create: (context) => SelectPostImageBloc(),
-            child: const SelectPostImageScreen(),
-          ),
+          const SelectPostImageScreen(),
+        );
+      case CreatePostPage.routename:
+        return pageTransition(
+          const CreatePostPage(),
         );
       case AddPostScreen.routename:
         return slideFromSidePageTransistion(
@@ -82,10 +88,16 @@ class MyApp extends StatelessWidget {
           ),
         );
       case SearchResultScreen.routename:
-        return slideFromSidePageTransistion(BlocProvider(
-          create: (context) => AddPostBloc(),
-          child: SearchResultScreen(searchText: settings.arguments as String),
-        ));
+        return slideFromSidePageTransistion(
+          BlocProvider(
+            create: (context) => AddPostBloc(),
+            child: SearchResultScreen(searchText: settings.arguments as String),
+          ),
+        );
+      case FindBusScreen.routename:
+        return slideFromSidePageTransistion(
+          const FindBusScreen(),
+        );
     }
     return pageTransition(const SplashScreen());
   }

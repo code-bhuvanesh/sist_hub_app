@@ -46,9 +46,14 @@ class Post {
   }
 
   factory Post.fromMap(Map<String, dynamic> map) {
+    var postimgUrl = "";
+    if (map['postimg'].isNotEmpty) {
+      postimgUrl = CurrentUser.instance.url + map['postimg'];
+    }
+
     return Post(
       id: map['id'] as int,
-      postimg: CurrentUser.instance.url + map['postimg'],
+      postimg: postimgUrl,
       description: map['description'] as String,
       postType: map['postType'] as String,
       created: DateTime.parse(map['created']),

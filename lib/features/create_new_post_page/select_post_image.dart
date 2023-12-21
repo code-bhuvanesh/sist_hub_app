@@ -60,15 +60,23 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                AddPostScreen.routename,
-                arguments: _media[_selectedImage],
-              );
+            onPressed: () async {
+              // Navigator.of(context).pushNamed(
+              //   AddPostScreen.routename,
+              //   arguments: _media[_selectedImage],
+              // );
+              context.read<CreateNewPostBloc>().add(
+                    AddSelectedFile(
+                      selectedFile: await _media[_selectedImage].getFile(),
+                    ),
+                  );
+
+              if (mounted) Navigator.of(context).pop();
             },
             style: ButtonStyle(
-                foregroundColor:
-                    MaterialStateColor.resolveWith((states) => AppColors.blue)),
+              foregroundColor:
+                  MaterialStateColor.resolveWith((states) => AppColors.blue),
+            ),
             child: const Text(
               "Next",
               style: AppTextStyles.postTittleText,
@@ -86,22 +94,21 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
       body: BlocListener<PermissionBloc, PermissionState>(
         listener: (_, state) {
           if (state is PermissionGranted) {
-            context.read<SelectPostImageBloc>().add(const GetAlbums());
+            context.read<CreateNewPostBloc>().add(const GetAlbums());
           }
         },
-        child: BlocBuilder<SelectPostImageBloc, SelectPostImageState>(
+        child: BlocBuilder<CreateNewPostBloc, CreateNewPostState>(
           builder: (context, state) {
             if (state is AlbumsLoaded) {
               _dropDownItems = state.albums;
               _selectedValue = _dropDownItems[0];
-              context.read<SelectPostImageBloc>().add(
+              context.read<CreateNewPostBloc>().add(
                     GetImagesFromAlbums(
                       album: _selectedValue!,
                     ),
                   );
             } else if (state is ImagesLoaded) {
               _media = state.mediums;
-              
             }
 
             return SafeArea(
@@ -150,7 +157,7 @@ class _SelectPostImageScreenState extends State<SelectPostImageScreen> {
                             onChanged: (value) {
                               setState(() {
                                 _selectedValue = value!;
-                                context.read<SelectPostImageBloc>().add(
+                                context.read<CreateNewPostBloc>().add(
                                       GetImagesFromAlbums(
                                         album: _selectedValue!,
                                       ),

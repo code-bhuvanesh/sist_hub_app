@@ -61,7 +61,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
         }
       },
       child: ClipRRect(
-        borderRadius: AppSizes.border15,
+        borderRadius: AppSizes.border10,
         child: Container(
           color: AppColors.postBorder,
           height: double.infinity,
@@ -180,7 +180,7 @@ class CommetWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       child: ClipRRect(
-        borderRadius: AppSizes.border15,
+        borderRadius: AppSizes.border10,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
           color: AppColors.background,

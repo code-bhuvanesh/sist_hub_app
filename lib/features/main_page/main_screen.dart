@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/profile_page/profile_page.dart';
-import 'package:sist_hub/features/search_page/search_screen.dart';
-import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
-import 'package:sist_hub/features/notifications_page/notifications_screen.dart';
-import 'package:sist_hub/utils/constants.dart';
 
+import '/features/profile_page/profile_page.dart';
+import '/features/search_page/search_screen.dart';
+import '/features/bus_page/find_bus_screen.dart';
+import '/features/auth/bloc/auth_bloc.dart';
+import '/features/notifications_page/notifications_screen.dart';
+import '/styles/styles.dart';
+import '/utils/constants.dart';
+import '../create_new_post_page/create_post_page.dart';
 import '../home_page/bloc/home_bloc.dart';
 import '../home_page/home_screen.dart';
-import '../select_post_image_page/select_post_image.dart';
-import '/styles/styles.dart';
 import '../settings_page/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -71,6 +72,9 @@ class _MainScreenState extends State<MainScreen> {
                     drawerTiles(
                       title: "Find your Bus",
                       iconImgLoc: "assets/icons/bus_icon.png",
+                      onTap: () => Navigator.of(context).pushNamed(
+                        FindBusScreen.routename,
+                      ),
                     ),
                     drawerTiles(
                       title: "Order in Canteen",
@@ -122,6 +126,7 @@ class _MainScreenState extends State<MainScreen> {
               const SearchScreen(),
               Container(),
               const NotificationsScreen(),
+              ProfilePage(userId: CurrentUser.instance.user!.id),
             ],
           );
         }),
@@ -129,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
           if (value == 2) {
-            Navigator.of(context).pushNamed(SelectPostImageScreen.routename);
+            Navigator.of(context).pushNamed(CreatePostPage.routename);
             value = postionIndex;
           }
           setState(() {
@@ -152,6 +157,7 @@ class _MainScreenState extends State<MainScreen> {
           navigationBarItem(label: "search"),
           navigationBarItem(label: "add_post"),
           navigationBarItem(label: "notification", is2Icons: true),
+          navigationBarItem(label: "user", is2Icons: true),
         ],
       ),
     );
@@ -179,37 +185,41 @@ class _MainScreenState extends State<MainScreen> {
   drawerTiles({
     required String title,
     required String iconImgLoc,
+    void Function()? onTap,
     Color? iconColor,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: AppSizes.border15,
-        ),
-        elevation: 2,
-        color: AppColors.postBorder,
-        child: Container(
-          width: double.infinity,
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
-                children: [
-                  ImageIcon(
-                    AssetImage(iconImgLoc),
-                    color: iconColor,
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    title,
-                    style: AppTextStyles.appDrawerTitleTextStyle,
-                  ),
-                ],
-              )),
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: AppSizes.border10,
+          ),
+          elevation: 2,
+          color: AppColors.postBorder,
+          child: Container(
+            width: double.infinity,
+            height: 50,
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Row(
+                  children: [
+                    ImageIcon(
+                      AssetImage(iconImgLoc),
+                      color: iconColor,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      title,
+                      style: AppTextStyles.appDrawerTitleTextStyle,
+                    ),
+                  ],
+                )),
+          ),
         ),
       ),
     );
@@ -240,7 +250,7 @@ class _MainScreenState extends State<MainScreen> {
                 height: 5,
               ),
               ClipRRect(
-                borderRadius: AppSizes.border15,
+                borderRadius: AppSizes.border10,
                 child: Container(
                   color: AppColors.postBorder,
                   padding: const EdgeInsets.symmetric(
@@ -248,10 +258,18 @@ class _MainScreenState extends State<MainScreen> {
                     horizontal: 5,
                   ),
                   child: GestureDetector(
-                      onTap: () => Navigator.of(context).popAndPushNamed(
-                            ProfilePage.routename,
-                            arguments: CurrentUser.instance.user!.id,
-                          ),
+                      // onTap: () => Navigator.of(context).popAndPushNamed(
+                      //       ProfilePage.routename,
+                      //       arguments: CurrentUser.instance.user!.id,
+                      //     ),
+                      onTap: () {
+                        setState(
+                          () {
+                            Navigator.of(context).pop();
+                            postionIndex = 4;
+                          },
+                        );
+                      },
                       child: const Text(" view profile ")),
                 ),
               ),

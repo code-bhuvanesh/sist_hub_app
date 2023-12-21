@@ -15,7 +15,7 @@ class AddPostBloc extends Bloc<AddPostEvent, AddPostState> {
   Future<FutureOr<void>> addPostToServer(
       AddPostToServer event, Emitter<AddPostState> emit) async {
     var response = await PostsRepository().sharePost(
-      description: event.discription,
+      postContent: event.discription,
       file: event.file,
     );
     if (response["statuscode"] == 200) {

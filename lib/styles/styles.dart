@@ -8,8 +8,9 @@ class AppColors {
   //     Color.fromARGB(255, 246, 246, 246); //#fa
   static const Color background =
       Color.fromARGB(255, 246, 246, 246); //#faf7f7 hex value
-  static const Color postBackgound = Color.fromARGB(255, 150, 150, 150);
+  static const Color postBackgound = Color.fromARGB(255, 100, 100, 100);
   static const Color postBorder = Colors.white;
+  static const Color foreground = Colors.white;
   static const Color blue = Color.fromARGB(255, 33, 54, 243);
 }
 
@@ -20,6 +21,10 @@ class AppTextStyles {
     fontWeight: FontWeight.w900,
   );
 
+  static const postTextStyle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+  );
   static const postTittleText = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
@@ -60,14 +65,14 @@ class AppTextStyles {
 
 class AppSizes {
   //radius
-  static double radius15 = 15;
+  static double radius10 = 10;
   static double radius25 = 25;
-  static BorderRadius border15 = BorderRadius.circular(radius15);
+  static BorderRadius border10 = BorderRadius.circular(radius10);
   static BorderRadius border25 = BorderRadius.circular(radius25);
   static double postTopSideRadius = 15;
   static BorderRadius postTopSideBorder = BorderRadius.only(
-    topLeft: Radius.circular(radius15),
-    topRight: Radius.circular(radius15),
+    topLeft: Radius.circular(radius10),
+    topRight: Radius.circular(radius10),
   );
   static BorderRadius commentTopSideBorder = BorderRadius.only(
     topLeft: Radius.circular(radius25),

@@ -26,13 +26,12 @@ class CurrentUser {
   int? userId = 0;
   User? user;
   CurrentUser._() {
-    loadDefaults();
     // if (token == null) {
     //   getToken();
     // }
   }
 
-  void loadDefaults() async {
+  Future<void> loadDefaults() async {
     var u = await SecureStorage().readSecureData("url");
     if (u.isNotEmpty) {
       url = u;

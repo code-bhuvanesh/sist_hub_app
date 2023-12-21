@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/commonWidget.dart';
 import 'search_widgets.dart';
 
 class SearchResultScreen extends StatefulWidget {
@@ -29,7 +30,7 @@ class SearchResultScreenState extends State<SearchResultScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             searchBar(searchController, (S) {}),

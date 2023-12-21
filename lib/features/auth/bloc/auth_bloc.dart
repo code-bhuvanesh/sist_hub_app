@@ -22,6 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> appStarted(AppStarted event, Emitter<AuthState> emit) async {
     if (await _checkAuthenticated()) {
+      await CurrentUser.instance.loadDefaults();
       CurrentUser.instance.token = await _readToken();
       emit(Authenticated());
     } else {

@@ -10,4 +10,5 @@ abstract class AddPostState extends Equatable {
 class AddPostInitial extends AddPostState {}
 
 class PostsAddedSucessfully extends AddPostState {}
+
 class PostsAddedUnsucessful extends AddPostState {}

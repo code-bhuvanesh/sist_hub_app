@@ -30,25 +30,29 @@ class PostsRepository {
   }
 
   Future<Map<String, dynamic>> sharePost({
-    required String description,
+    required String postContent,
     String postType = "general",
-    required File file,
+    required File? file,
   }) async {
     var url = Uri.parse(CurrentUser.instance.url + addpostsUrl);
     var request = http.MultipartRequest("POST", url);
     request.headers.addAll(
       await CurrentUser.instance.getAuthorizationHeader,
     );
-    request.fields["description"] = description;
+    request.fields["postContent"] = postContent;
     request.fields["postType"] = postType;
+    if (file != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          "postImage",
+          file.path,
+          contentType: MediaType("image", "jpeg"),
+        ),
+      );
+    } else {
+      request.fields["postImage"] = "";
+    }
 
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        "postImage",
-        file.path,
-        contentType: MediaType("image", "jpeg"),
-      ),
-    );
     var response = await request.send();
     Map<String, dynamic> serverResponse =
         json.decode(await response.stream.bytesToString());

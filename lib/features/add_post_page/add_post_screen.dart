@@ -119,7 +119,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         child: Column(
                           children: [
                             ClipRRect(
-                              borderRadius: AppSizes.border15,
+                              borderRadius: AppSizes.border10,
                               child: Container(
                                 padding: const EdgeInsets.all(8),
                                 color: AppColors.background,

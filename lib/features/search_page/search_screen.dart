@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:sist_hub/features/search_page/search_result_screen.dart';
 import 'package:sist_hub/styles/styles.dart';
 
+import '../../widgets/commonWidget.dart';
 import 'search_widgets.dart';
 
 class SearchScreen extends StatefulWidget {
