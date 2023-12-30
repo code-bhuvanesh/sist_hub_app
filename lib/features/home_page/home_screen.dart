@@ -66,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: IconButton(
                     onPressed: () =>
                         Navigator.of(context).pushNamed(AllChatsPage.routename),
-                    icon: const Icon(Icons.chat),
+                    // icon: const Icon(Icons.chat),
+                    icon: Image.asset("assets/icons/chat_icon.png"),
                   ),
                 ),
               ],

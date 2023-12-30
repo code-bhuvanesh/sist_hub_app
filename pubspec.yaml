@@ -31,6 +31,7 @@ dependencies:
   custom_refresh_indicator: ^2.2.1
   cached_network_image: ^3.2.3
   web_socket_channel: ^2.4.0
+  flutter_launcher_icons: ^0.13.1
   # https://pub.dev/packages/info_popup try it later
 
 dev_dependencies:
