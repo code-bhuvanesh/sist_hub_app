@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:sist_hub/features/bus_page/find_bus_screen.dart';
+import 'package:sist_hub/features/chats_page/bloc/chats_bloc.dart';
+import 'package:sist_hub/features/chats_page/all_chats_page.dart';
+import 'package:sist_hub/features/chats_page/chats_page.dart';
 import 'package:sist_hub/features/create_new_post_page/create_post_page.dart';
 import 'package:sist_hub/features/profile_page/profile_page.dart';
 import 'package:sist_hub/features/search_page/search_result_screen.dart';
@@ -84,14 +87,35 @@ class MyApp extends StatelessWidget {
         return slideFromSidePageTransistion(
           BlocProvider(
             create: (context) => AddPostBloc(),
-            child: AddPostScreen(postImage: settings.arguments as Medium),
+            child: AddPostScreen(
+              postImage: settings.arguments as Medium,
+            ),
           ),
         );
       case SearchResultScreen.routename:
         return slideFromSidePageTransistion(
           BlocProvider(
             create: (context) => AddPostBloc(),
-            child: SearchResultScreen(searchText: settings.arguments as String),
+            child: SearchResultScreen(
+              searchText: settings.arguments as String,
+            ),
+          ),
+        );
+      case AllChatsPage.routename:
+        return slideFromSidePageTransistion(
+          BlocProvider(
+            create: (context) => ChatsBloc(),
+            child: const AllChatsPage(),
+          ),
+        );
+      case chatsPage.routename:
+        return slideFromSidePageTransistion(
+          BlocProvider(
+            create: (context) => ChatsBloc(),
+            child: chatsPage(
+              userid: (settings.arguments as List)[0] as int,
+              username: (settings.arguments as List)[1] as String,
+            ),
           ),
         );
       case FindBusScreen.routename:

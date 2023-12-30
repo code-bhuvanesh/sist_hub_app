@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
+import 'package:sist_hub/features/chats_page/all_chats_page.dart';
 import 'package:sist_hub/features/home_page/widgets/pull_to_refresh.dart';
 import 'package:sist_hub/styles/styles.dart';
 
@@ -59,6 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
               systemOverlayStyle: systemOverlayStyle,
               backgroundColor: AppColors.background,
               leading: profileButton(),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: IconButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(AllChatsPage.routename),
+                    icon: const Icon(Icons.chat),
+                  ),
+                ),
+              ],
               title: const Text(
                 "SIST HUB",
                 style: AppTextStyles.logoTextStyle,

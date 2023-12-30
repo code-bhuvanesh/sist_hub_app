@@ -3,11 +3,14 @@ import 'package:sist_hub/utils/secure_storage.dart';
 
 import '../data/model/user.dart';
 
-const localUrl = "http://192.168.29.180:8000";
+const wsurl = "ws://$localdomain";
+const chatSocketUrl = "$wsurl/ws/chats/";
+
+const localdomain = "192.168.29.180:8000";
+const localUrl = "http://$localdomain";
 // const localUrl = "https://sist-hub-backend.vercel.app";
 const onlineUrl =
     "https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.app.github.dev";
-// https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.app.github.dev/
 const loginUrl = "/api/login/";
 const getpostsUrl = "/api/getposts/";
 const addpostsUrl = "/api/addposts/";
@@ -15,6 +18,7 @@ const likOrUnlikpostsUrl = "/api/likeunlikepost/";
 const getCommentsUrl = "/api/getcomments/";
 const addCommentsUrl = "/api/addcomments/";
 const getUserUrl = "/api/getuser/";
+const chatRoomUrl = "/chats/rooms/";
 //storage key names
 const keyToken = "token";
 const keyEmail = "email";

@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 
 import '../../../data/repository/posts_repository.dart';
-import '../../add_post_page/bloc/add_post_bloc.dart';
 
 part 'select_post_image_event.dart';
 part 'select_post_image_state.dart';

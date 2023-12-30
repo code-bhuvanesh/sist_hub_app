@@ -10,7 +10,8 @@ class AppColors {
       Color.fromARGB(255, 246, 246, 246); //#faf7f7 hex value
   static const Color postBackgound = Color.fromARGB(255, 100, 100, 100);
   static const Color postBorder = Colors.white;
-  static const Color foreground = Colors.white;
+  static const Color foreground = Color.fromARGB(255, 236, 236, 236);
+  static const Color chatsForeground = Color.fromARGB(255, 235, 233, 233);
   static const Color blue = Color.fromARGB(255, 33, 54, 243);
 }
 

@@ -98,7 +98,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                     decoration: const InputDecoration(
                         hintText: "enter some text...",
                         // fillColor: Colors.red,
-                        // filled: true,
+                        // filled: true,6
                         enabledBorder: InputBorder.none,
                         border: InputBorder.none),
                     textInputAction: TextInputAction.newline,
