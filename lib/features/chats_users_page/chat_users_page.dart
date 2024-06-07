@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/chats_page/bloc/chats_bloc.dart';
 import 'package:sist_hub/features/chats_page/chats_page.dart';
+import 'package:sist_hub/features/chats_users_page/bloc/chat_users_bloc.dart';
 import 'package:sist_hub/features/search_page/search_widgets.dart';
 
-class AllChatsPage extends StatefulWidget {
+class ChatUsersPage extends StatefulWidget {
   static const routename = "/allchatspage";
 
-  const AllChatsPage({super.key});
+  const ChatUsersPage({super.key});
 
   @override
-  State<AllChatsPage> createState() => _AllChatsPageState();
+  State<ChatUsersPage> createState() => _ChatUsersPageState();
 }
 
-class _AllChatsPageState extends State<AllChatsPage> {
+class _ChatUsersPageState extends State<ChatUsersPage> {
   @override
   void initState() {
-    context.read<ChatsBloc>().add(GetAllUsersChats());
+    context.read<ChatUsersBloc>().add(GetAllUsersChats());
     super.initState();
   }
 
@@ -44,7 +44,7 @@ class _AllChatsPageState extends State<AllChatsPage> {
           color: Colors.black,
         ),
       ),
-      body: BlocListener<ChatsBloc, ChatsState>(
+      body: BlocListener<ChatUsersBloc, ChatUsersState>(
         listener: (context, state) {
           if (state is AllUserChats) {
             setState(() {
@@ -62,7 +62,9 @@ class _AllChatsPageState extends State<AllChatsPage> {
                   itemCount: users.length,
                   itemBuilder: (context, index) {
                     return chatUsers(
-                        users[index]["username"], users[index]["id"]);
+                      users[index]["username"],
+                      users[index]["id"],
+                    );
                   }),
             ),
           ],
@@ -80,11 +82,14 @@ class _AllChatsPageState extends State<AllChatsPage> {
         Column(children: [
       GestureDetector(
         onTap: () => Navigator.of(context).pushNamed(
-          chatsPage.routename,
-          arguments: [id, username],
+          ChatsPage.routename,
+          arguments: [
+            id,
+            username,
+          ],
         ),
         child: Container(
-          color: Colors.white,
+          color: const Color.fromARGB(0, 255, 255, 255),
           height: 70,
           width: double.infinity,
           child: Row(children: [

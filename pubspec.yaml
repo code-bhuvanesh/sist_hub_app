@@ -32,6 +32,8 @@ dependencies:
   cached_network_image: ^3.2.3
   web_socket_channel: ^2.4.0
   flutter_launcher_icons: ^0.13.1
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
   # https://pub.dev/packages/info_popup try it later
 
 dev_dependencies:

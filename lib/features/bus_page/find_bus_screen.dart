@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sist_hub/features/bust_map_page/bus_map_page.dart';
 import 'package:sist_hub/styles/styles.dart';
 
 import '../../widgets/commonWidget.dart';
@@ -61,85 +62,90 @@ class _FindBusScreenState extends State<FindBusScreen> {
       viaPlacesText += "$p>";
     }
 
-    return Container(
-      height: 100,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 1,
-      ),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pushNamed(BusMapPage.routename);
+      },
+      child: Container(
+        height: 100,
+        margin: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 1,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(200),
-                ),
-                child: const Text(
-                  "70",
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.white,
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(200),
+                  ),
+                  child: const Text(
+                    "70",
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  // color: Colors.amber,
-                  width: double.maxFinite,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Avadi",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      RichText(
-                        maxLines: 1,
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
+                Expanded(
+                  child: Container(
+                    // color: Colors.amber,
+                    width: double.maxFinite,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Avadi",
+                          style: TextStyle(
+                            fontSize: 20,
                           ),
-                          children: <TextSpan>[
-                            const TextSpan(
-                              text: 'via: ',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            TextSpan(text: viaPlacesText, style: TextStyle()),
-                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text("arival time : 9:40 AM"),
-                    ],
+                        SizedBox(
+                          height: 5,
+                        ),
+                        RichText(
+                          maxLines: 1,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
+                          text: TextSpan(
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                            children: <TextSpan>[
+                              const TextSpan(
+                                text: 'via: ',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              TextSpan(text: viaPlacesText, style: TextStyle()),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text("arival time : 9:40 AM"),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              // Expanded(
-              //   child: Container(
-              //     width: 100,
-              //     color: Colors.black,
-              //   ),
-              // )
-            ],
+                // Expanded(
+                //   child: Container(
+                //     width: 100,
+                //     color: Colors.black,
+                //   ),
+                // )
+              ],
+            ),
           ),
         ),
       ),

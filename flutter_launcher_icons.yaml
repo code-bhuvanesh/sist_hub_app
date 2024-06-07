@@ -3,3 +3,5 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/sist_hub_logo.jpg"
   min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_background: #ffffff
+  adaptive_icon_foreground: #000000

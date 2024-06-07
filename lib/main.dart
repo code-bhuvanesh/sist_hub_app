@@ -3,15 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:sist_hub/features/bus_page/find_bus_screen.dart';
-import 'package:sist_hub/features/chats_page/bloc/chats_bloc.dart';
-import 'package:sist_hub/features/chats_page/all_chats_page.dart';
+import 'package:sist_hub/features/bust_map_page/bus_map_page.dart';
+import 'package:sist_hub/features/chats_page/bloc/chat_bloc.dart';
 import 'package:sist_hub/features/chats_page/chats_page.dart';
+import 'package:sist_hub/features/chats_users_page/bloc/chat_users_bloc.dart';
 import 'package:sist_hub/features/create_new_post_page/create_post_page.dart';
 import 'package:sist_hub/features/profile_page/profile_page.dart';
 import 'package:sist_hub/features/search_page/search_result_screen.dart';
 
 import 'features/add_post_page/add_post_screen.dart';
 import 'features/add_post_page/bloc/add_post_bloc.dart';
+import 'features/chats_users_page/chat_users_page.dart';
 import 'features/create_new_post_page/bloc/select_post_image_bloc.dart';
 import 'features/create_new_post_page/select_post_image.dart';
 import 'features/login_page/bloc/login_bloc.dart';
@@ -71,7 +73,7 @@ class MyApp extends StatelessWidget {
         return pageTransition(
           ProfilePage(
             userId: settings.arguments as int,
-          ),
+          ), 
         );
       case SettingScreen.routename:
         return pageTransition(const SettingScreen());
@@ -101,18 +103,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
         );
-      case AllChatsPage.routename:
+      case ChatUsersPage.routename:
         return slideFromSidePageTransistion(
           BlocProvider(
-            create: (context) => ChatsBloc(),
-            child: const AllChatsPage(),
+            create: (context) => ChatUsersBloc(),
+            child: const ChatUsersPage(),
           ),
         );
-      case chatsPage.routename:
+      case ChatsPage.routename:
         return slideFromSidePageTransistion(
           BlocProvider(
-            create: (context) => ChatsBloc(),
-            child: chatsPage(
+            create: (context) => ChatBloc(),
+            child: ChatsPage(
               userid: (settings.arguments as List)[0] as int,
               username: (settings.arguments as List)[1] as String,
             ),
@@ -121,6 +123,10 @@ class MyApp extends StatelessWidget {
       case FindBusScreen.routename:
         return slideFromSidePageTransistion(
           const FindBusScreen(),
+        );
+      case BusMapPage.routename:
+        return slideFromSidePageTransistion(
+          const BusMapPage(),
         );
     }
     return pageTransition(const SplashScreen());

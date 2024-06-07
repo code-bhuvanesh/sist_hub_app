@@ -4,10 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sist_hub/features/auth/bloc/auth_bloc.dart';
-import 'package:sist_hub/features/chats_page/all_chats_page.dart';
 import 'package:sist_hub/features/home_page/widgets/pull_to_refresh.dart';
 import 'package:sist_hub/styles/styles.dart';
 
+import '../chats_users_page/chat_users_page.dart';
 import '../login_page/login_screen.dart';
 import 'bloc/home_bloc.dart';
 import 'widgets/post_widget.dart';
@@ -64,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: IconButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed(AllChatsPage.routename),
+                    onPressed: () => Navigator.of(context)
+                        .pushNamed(ChatUsersPage.routename),
                     // icon: const Icon(Icons.chat),
                     icon: Image.asset("assets/icons/chat_icon.png"),
                   ),

@@ -1,33 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sist_hub/features/chats_page/bloc/chats_bloc.dart';
+import 'package:sist_hub/features/chats_page/bloc/chat_bloc.dart';
 import 'package:sist_hub/styles/styles.dart';
 import 'package:sist_hub/utils/constants.dart';
 
-class chatsPage extends StatefulWidget {
+class ChatsPage extends StatefulWidget {
   static const routename = "/chatspage";
   final int userid;
   final String username;
-  const chatsPage({
+  const ChatsPage({
     super.key,
     required this.userid,
     required this.username,
   });
 
   @override
-  State<chatsPage> createState() => _chatsPageState();
+  State<ChatsPage> createState() => _ChatsPageState();
 }
 
-class _chatsPageState extends State<chatsPage> {
+class _ChatsPageState extends State<ChatsPage> {
   @override
   void initState() {
-    context.read<ChatsBloc>().add(GetRoomName(userid: widget.userid));
+    context.read<ChatBloc>().add(GetRoomKey(
+          userid: widget.userid,
+          context: context,
+        ));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // context.read<ChatBloc>().close();
+    scrollController.dispose();
+    super.dispose();
   }
 
   late String roomkey;
   var messages = [];
   var msgController = TextEditingController();
+  var scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,26 +62,42 @@ class _chatsPageState extends State<chatsPage> {
           color: Colors.black,
         ),
       ),
-      body: BlocListener<ChatsBloc, ChatsState>(
+      body: BlocListener<ChatBloc, ChatState>(
         listener: (context, state) {
           if (state is RoomKey) {
             roomkey = state.roomkey;
-            context.read<ChatsBloc>().add(GetAllMessages(roomkey: roomkey));
+            context.read<ChatBloc>().add(GetAllMessages(roomkey: roomkey));
           }
           if (state is AllMessages) {
             setState(() {
               messages = state.allMessages;
+              scrollController
+                  .jumpTo(scrollController.position.minScrollExtent);
+            });
+            print("check");
+            print("scroll : ${scrollController.position}");
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollController
+                  .jumpTo(scrollController.position.maxScrollExtent);
             });
           }
           if (state is ReceivedMessage) {
             setState(() {
               messages.add(state.message);
             });
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              scrollController.animateTo(
+                scrollController.position.maxScrollExtent,
+                curve: Curves.bounceIn,
+                duration: const Duration(microseconds: 300),
+              );
+            });
           }
         },
         child: Column(children: [
           Expanded(
             child: ListView.builder(
+              controller: scrollController,
               padding: const EdgeInsets.only(top: 10),
               itemCount: messages.length,
               itemBuilder: (context, index) => messageWidget(
@@ -107,7 +134,7 @@ class _chatsPageState extends State<chatsPage> {
                       borderRadius: AppSizes.border25,
                       child: GestureDetector(
                         onTap: () {
-                          context.read<ChatsBloc>().add(
+                          context.read<ChatBloc>().add(
                                 SendMessage(
                                   message: {
                                     "message": msgController.text,
@@ -123,7 +150,15 @@ class _chatsPageState extends State<chatsPage> {
                               "message": msgController.text,
                               "isSender": true,
                             });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              scrollController.animateTo(
+                                scrollController.position.maxScrollExtent,
+                                curve: Curves.bounceIn,
+                                duration: const Duration(microseconds: 300),
+                              );
+                            });
                             msgController.text = "";
+                            FocusManager.instance.primaryFocus?.unfocus();
                           });
                         },
                         child: Container(
@@ -161,7 +196,7 @@ class _chatsPageState extends State<chatsPage> {
               // minWidth: 70,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            color: Colors.black,
+            color: const Color.fromARGB(255, 43, 43, 43),
             child: Text(
               msg,
               style: const TextStyle(

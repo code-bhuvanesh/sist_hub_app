@@ -3,11 +3,14 @@ import 'package:sist_hub/utils/secure_storage.dart';
 
 import '../data/model/user.dart';
 
-const wsurl = "ws://$localdomain";
+// const wsurl = "ws://$localdomain";
+const wsurl = "wss://laughing-invention-5p559j5pjpqfpxpq-8000.app.github.dev";
 const chatSocketUrl = "$wsurl/ws/chats/";
 
 const localdomain = "192.168.29.180:8000";
-const localUrl = "http://$localdomain";
+// const localUrl = "http://$localdomain";
+const localUrl =
+    "https://laughing-invention-5p559j5pjpqfpxpq-8000.app.github.dev";
 // const localUrl = "https://sist-hub-backend.vercel.app";
 const onlineUrl =
     "https://code-bhuvanesh-orange-fiesta-gw66pj6w9wjcp7v5-8000.app.github.dev";
@@ -27,7 +30,7 @@ class CurrentUser {
   static final CurrentUser instance = CurrentUser._();
   String url = localUrl;
   String? token;
-  int? userId = 0;
+  int? userId;
   User? user;
   CurrentUser._() {
     // if (token == null) {
@@ -36,10 +39,10 @@ class CurrentUser {
   }
 
   Future<void> loadDefaults() async {
-    var u = await SecureStorage().readSecureData("url");
-    if (u.isNotEmpty) {
-      url = u;
-    }
+    // var u = await SecureStorage().readSecureData("url");
+    // if (u.isNotEmpty) {
+    //   url = u;
+    // }
     var t = await SecureStorage().readSecureData(keyToken);
     token = (t.isNotEmpty) ? t : null;
     var uid = await SecureStorage().readSecureData("userid");
